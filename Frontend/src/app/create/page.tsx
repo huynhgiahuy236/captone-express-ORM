@@ -310,10 +310,11 @@ export default function CreatePinPage() {
             setUseUrlMode(!useUrlMode);
             setErrors((prev) => ({ ...prev, image: undefined }));
           }}
-          className="flex items-center gap-1.5 rounded-full bg-gray-100 dark:bg-[#1c2136] dark:ring-1 dark:ring-[#2d2f40] px-4 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-[#252A42] transition cursor-pointer"
+          className="flex items-center gap-1.5 rounded-full bg-gray-100 dark:bg-[#1c2136] dark:ring-1 dark:ring-[#2d2f40] px-3 sm:px-4 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-[#252A42] transition cursor-pointer shrink-0"
+          title={useUrlMode ? "Tải lên bằng File" : "Dán link ảnh trực tiếp"}
         >
-          {useUrlMode ? <ImageIcon size={14} /> : <LinkIcon size={14} />}
-          <span>{useUrlMode ? "Tải lên bằng File" : "Dán link ảnh trực tiếp"}</span>
+          {useUrlMode ? <ImageIcon size={15} /> : <LinkIcon size={15} />}
+          <span className="hidden sm:inline">{useUrlMode ? "Tải lên bằng File" : "Dán link ảnh trực tiếp"}</span>
         </button>
       </div>
 

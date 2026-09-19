@@ -756,6 +756,176 @@
               ]
             }
           }
+        },
+        {
+          "name": "6.4 Check Follow Status",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/follow/status/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "follow",
+                "status",
+                "2"
+              ]
+            }
+          }
+        },
+        {
+          "name": "6.5 Get Followers",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/follow/followers/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "follow",
+                "followers",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "6.6 Get Following",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/follow/following/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "follow",
+                "following",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Notifications",
+      "item": [
+        {
+          "name": "7.1 Get User Notifications",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/notifications",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notifications"
+              ]
+            }
+          }
+        },
+        {
+          "name": "7.2 Get Unread Notification Count",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/notifications/unread-count",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notifications",
+                "unread-count"
+              ]
+            }
+          }
+        },
+        {
+          "name": "7.3 Mark All Notifications As Read",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "url": {
+              "raw": "{{baseUrl}}/notifications/read-all",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notifications",
+                "read-all"
+              ]
+            }
+          }
+        },
+        {
+          "name": "7.4 Mark Single Notification As Read",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "url": {
+              "raw": "{{baseUrl}}/notifications/1/read",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notifications",
+                "1",
+                "read"
+              ]
+            }
+          }
         }
       ]
     }

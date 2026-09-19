@@ -75,7 +75,7 @@ export const HukiLogo: React.FC<HukiLogoProps> = ({
             </span>
           </div>
           <span
-            className={`text-[9px] font-semibold tracking-wider uppercase mt-0.5 ${
+            className={`text-[9px] font-semibold tracking-wider uppercase mt-0.5 hidden sm:block ${
               lightModeText
                 ? "text-gray-300"
                 : "text-gray-500 dark:text-gray-400"

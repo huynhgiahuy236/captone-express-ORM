@@ -426,14 +426,15 @@ export default function PublicUserProfilePage() {
           {/* Section Header & Tabs & Smart Search Filter Bar */}
           <div className="flex flex-col gap-3 border-b border-gray-200 dark:border-[#2d2f40] pb-3 mb-6">
             
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-              {/* Dynamic Tabs based on Author Privacy Settings */}
-              <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto [scrollbar-width:none] shrink-0">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              {/* Dynamic Tabs: Evenly distributed 4-column grid on Mobile/Tablet (< lg), flex on Desktop (lg:) */}
+              <div className="grid grid-cols-4 sm:flex items-center gap-1 sm:gap-2 lg:gap-4 w-full lg:w-auto py-1 border-b border-gray-100 lg:border-transparent dark:border-[#2d2f40]/50 lg:dark:border-transparent overflow-x-auto no-scrollbar">
                 {/* 1. Created Pins Tab */}
                 <button
                   type="button"
                   onClick={() => setActiveTab("created")}
-                  className={`flex items-center gap-1.5 pb-2 text-xs sm:text-sm font-bold transition border-b-2 cursor-pointer ${
+                  title="Tác phẩm đã tạo"
+                  className={`w-full sm:w-auto pb-2.5 text-xs sm:text-sm font-bold transition border-b-2 cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 whitespace-nowrap shrink-0 ${
                     activeTab === "created"
                       ? "border-[#0052cc] text-[#0052cc] dark:text-blue-400"
                       : author?.canViewCreated === false
@@ -441,10 +442,10 @@ export default function PublicUserProfilePage() {
                       : "border-transparent text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
-                  <Layers size={17} />
-                  <span>Tác phẩm đã tạo</span>
+                  <Layers size={18} className="shrink-0" />
+                  <span className="hidden sm:inline">Đã tạo</span>
                   {author?.canViewCreated ? (
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-[#252A42] font-semibold text-gray-600 dark:text-gray-300">
+                    <span className="text-[11px] sm:text-xs px-1.5 py-0.5 rounded-full bg-gray-100 dark:bg-[#252A42] font-semibold text-gray-600 dark:text-gray-300">
                       {createdPins.length}
                     </span>
                   ) : (
@@ -456,7 +457,8 @@ export default function PublicUserProfilePage() {
                 <button
                   type="button"
                   onClick={() => setActiveTab("saved")}
-                  className={`flex items-center gap-1.5 pb-2 text-xs sm:text-sm font-bold transition border-b-2 cursor-pointer ${
+                  title="Ghim đã lưu"
+                  className={`w-full sm:w-auto pb-2.5 text-xs sm:text-sm font-bold transition border-b-2 cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 whitespace-nowrap shrink-0 ${
                     activeTab === "saved"
                       ? "border-[#0052cc] text-[#0052cc] dark:text-blue-400"
                       : author?.canViewSaved === false
@@ -464,10 +466,10 @@ export default function PublicUserProfilePage() {
                       : "border-transparent text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
-                  <Bookmark size={17} />
-                  <span>Folder & Ghim đã lưu</span>
+                  <Bookmark size={18} className="shrink-0" />
+                  <span className="hidden sm:inline">Đã lưu</span>
                   {author?.canViewSaved ? (
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-[#252A42] font-semibold text-gray-600 dark:text-gray-300">
+                    <span className="text-[11px] sm:text-xs px-1.5 py-0.5 rounded-full bg-gray-100 dark:bg-[#252A42] font-semibold text-gray-600 dark:text-gray-300">
                       {savedPins.length}
                     </span>
                   ) : (
@@ -479,7 +481,8 @@ export default function PublicUserProfilePage() {
                 <button
                   type="button"
                   onClick={() => setActiveTab("liked_pins")}
-                  className={`flex items-center gap-1.5 pb-2 text-xs sm:text-sm font-bold transition border-b-2 cursor-pointer ${
+                  title="Ảnh đã thích"
+                  className={`w-full sm:w-auto pb-2.5 text-xs sm:text-sm font-bold transition border-b-2 cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 whitespace-nowrap shrink-0 ${
                     activeTab === "liked_pins"
                       ? "border-[#0052cc] text-[#0052cc] dark:text-blue-400"
                       : author?.canViewLikedPins === false
@@ -488,12 +491,12 @@ export default function PublicUserProfilePage() {
                   }`}
                 >
                   <Heart
-                    size={17}
-                    className={activeTab === "liked_pins" ? "fill-rose-500 text-rose-500" : ""}
+                    size={18}
+                    className={`shrink-0 ${activeTab === "liked_pins" ? "fill-rose-500 text-rose-500" : ""}`}
                   />
-                  <span>Ảnh đã thích</span>
+                  <span className="hidden sm:inline">Đã thích</span>
                   {author?.canViewLikedPins ? (
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-[#252A42] font-semibold text-gray-600 dark:text-gray-300">
+                    <span className="text-[11px] sm:text-xs px-1.5 py-0.5 rounded-full bg-gray-100 dark:bg-[#252A42] font-semibold text-gray-600 dark:text-gray-300">
                       {likedPins.length}
                     </span>
                   ) : (
@@ -505,7 +508,8 @@ export default function PublicUserProfilePage() {
                 <button
                   type="button"
                   onClick={() => setActiveTab("liked_comments")}
-                  className={`flex items-center gap-1.5 pb-2 text-xs sm:text-sm font-bold transition border-b-2 cursor-pointer ${
+                  title="Bình luận đã thích"
+                  className={`w-full sm:w-auto pb-2.5 text-xs sm:text-sm font-bold transition border-b-2 cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 whitespace-nowrap shrink-0 ${
                     activeTab === "liked_comments"
                       ? "border-[#0052cc] text-[#0052cc] dark:text-blue-400"
                       : author?.canViewLikedComments === false
@@ -513,10 +517,10 @@ export default function PublicUserProfilePage() {
                       : "border-transparent text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
-                  <MessageCircle size={17} />
-                  <span>Bình luận đã thích</span>
+                  <MessageCircle size={18} className="shrink-0" />
+                  <span className="hidden sm:inline">Bình luận</span>
                   {author?.canViewLikedComments ? (
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-[#252A42] font-semibold text-gray-600 dark:text-gray-300">
+                    <span className="text-[11px] sm:text-xs px-1.5 py-0.5 rounded-full bg-gray-100 dark:bg-[#252A42] font-semibold text-gray-600 dark:text-gray-300">
                       {likedComments.length}
                     </span>
                   ) : (
@@ -527,8 +531,8 @@ export default function PublicUserProfilePage() {
 
               {/* Smart Relevance Search Filter Input with 1s debounce */}
               {!currentTabPrivacy.isLocked && (
-                <div className="relative flex items-center w-full md:w-auto min-w-[200px] sm:min-w-[240px]">
-                  <Search size={14} className="absolute left-3 text-gray-400 dark:text-gray-500 pointer-events-none" />
+                <div className="relative flex items-center w-full lg:w-auto min-w-[180px] lg:min-w-[240px]">
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none" />
                   <input
                     type="text"
                     value={searchQuery}
@@ -542,9 +546,9 @@ export default function PublicUserProfilePage() {
                         ? "ảnh đã thích..."
                         : "bình luận..."
                     }`}
-                    className="w-full pl-8 pr-8 py-1.5 rounded-full bg-gray-100 dark:bg-[#252A42] border border-transparent focus:border-[#0052cc] text-xs font-medium text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-hidden transition shadow-2xs"
+                    className="w-full pl-8 pr-8 py-2 rounded-full bg-gray-100 dark:bg-[#252A42] border border-transparent focus:border-[#0052cc] text-xs font-medium text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-hidden transition shadow-2xs"
                   />
-                  <div className="absolute right-2.5 flex items-center gap-1.5">
+                  <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
                     {isFiltering ? (
                       <Loader2 size={14} className="animate-spin text-[#0052cc] dark:text-blue-400" />
                     ) : searchQuery ? (

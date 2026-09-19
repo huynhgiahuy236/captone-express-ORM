@@ -2,7 +2,16 @@ export const userSwagger = {
   "/api/users/profile": {
     get: {
       tags: ["Users"],
-      security: [{ bearerAuth: [] }],
+      summary: "Get current user profile and statistics",
+      parameters: [
+        {
+          name: "token",
+          in: "header",
+          description: "Access Token",
+          required: false,
+          schema: { type: "string" },
+        },
+      ],
       responses: {
         200: { description: "Success" },
         401: { description: "Unauthorized" },
@@ -12,7 +21,16 @@ export const userSwagger = {
     },
     put: {
       tags: ["Users"],
-      security: [{ bearerAuth: [] }],
+      summary: "Update current user profile and avatar",
+      parameters: [
+        {
+          name: "token",
+          in: "header",
+          description: "Access Token",
+          required: false,
+          schema: { type: "string" },
+        },
+      ],
       requestBody: {
         content: {
           "multipart/form-data": {
@@ -40,7 +58,16 @@ export const userSwagger = {
   "/api/users/privacy": {
     put: {
       tags: ["Users"],
-      security: [{ bearerAuth: [] }],
+      summary: "Update tab privacy settings",
+      parameters: [
+        {
+          name: "token",
+          in: "header",
+          description: "Access Token",
+          required: false,
+          schema: { type: "string" },
+        },
+      ],
       requestBody: {
         required: true,
         content: {
@@ -69,13 +96,20 @@ export const userSwagger = {
   "/api/users/{userId}": {
     get: {
       tags: ["Users"],
-      security: [{ bearerAuth: [] }, {}],
+      summary: "Get public user profile by user ID",
       parameters: [
         {
           name: "userId",
           in: "path",
           required: true,
           schema: { type: "integer", example: 1 },
+        },
+        {
+          name: "token",
+          in: "header",
+          description: "Optional: Access Token",
+          required: false,
+          schema: { type: "string" },
         },
       ],
       responses: {
@@ -88,7 +122,16 @@ export const userSwagger = {
   "/api/users/saved-images": {
     get: {
       tags: ["Users"],
-      security: [{ bearerAuth: [] }],
+      summary: "Get list of saved images for current user",
+      parameters: [
+        {
+          name: "token",
+          in: "header",
+          description: "Access Token",
+          required: false,
+          schema: { type: "string" },
+        },
+      ],
       responses: {
         200: { description: "Success" },
         401: { description: "Unauthorized" },
@@ -100,7 +143,7 @@ export const userSwagger = {
   "/api/users/saved-images/{userId}": {
     get: {
       tags: ["Users"],
-      security: [{ bearerAuth: [] }, {}],
+      summary: "Get list of saved images by user ID (respects privacy)",
       parameters: [
         {
           name: "userId",
@@ -108,10 +151,17 @@ export const userSwagger = {
           required: true,
           schema: { type: "integer", example: 1 },
         },
+        {
+          name: "token",
+          in: "header",
+          description: "Optional: Access Token",
+          required: false,
+          schema: { type: "string" },
+        },
       ],
       responses: {
         200: { description: "Success" },
-        403: { description: "Forbidden (Private tab)" },
+        403: { description: "Forbidden" },
         404: { description: "Not Found" },
         500: { description: "Internal Server Error" },
       },
@@ -120,7 +170,16 @@ export const userSwagger = {
   "/api/users/created-images": {
     get: {
       tags: ["Users"],
-      security: [{ bearerAuth: [] }],
+      summary: "Get list of created images for current user",
+      parameters: [
+        {
+          name: "token",
+          in: "header",
+          description: "Access Token",
+          required: false,
+          schema: { type: "string" },
+        },
+      ],
       responses: {
         200: { description: "Success" },
         401: { description: "Unauthorized" },
@@ -132,7 +191,7 @@ export const userSwagger = {
   "/api/users/created-images/{userId}": {
     get: {
       tags: ["Users"],
-      security: [{ bearerAuth: [] }, {}],
+      summary: "Get list of created images by user ID",
       parameters: [
         {
           name: "userId",
@@ -140,10 +199,17 @@ export const userSwagger = {
           required: true,
           schema: { type: "integer", example: 1 },
         },
+        {
+          name: "token",
+          in: "header",
+          description: "Optional: Access Token",
+          required: false,
+          schema: { type: "string" },
+        },
       ],
       responses: {
         200: { description: "Success" },
-        403: { description: "Forbidden (Private tab)" },
+        403: { description: "Forbidden" },
         404: { description: "Not Found" },
         500: { description: "Internal Server Error" },
       },
@@ -152,7 +218,16 @@ export const userSwagger = {
   "/api/users/liked-images": {
     get: {
       tags: ["Users"],
-      security: [{ bearerAuth: [] }],
+      summary: "Get list of liked images for current user",
+      parameters: [
+        {
+          name: "token",
+          in: "header",
+          description: "Access Token",
+          required: false,
+          schema: { type: "string" },
+        },
+      ],
       responses: {
         200: { description: "Success" },
         401: { description: "Unauthorized" },
@@ -163,7 +238,16 @@ export const userSwagger = {
   "/api/users/liked-comments": {
     get: {
       tags: ["Users"],
-      security: [{ bearerAuth: [] }],
+      summary: "Get list of liked comments for current user",
+      parameters: [
+        {
+          name: "token",
+          in: "header",
+          description: "Access Token",
+          required: false,
+          schema: { type: "string" },
+        },
+      ],
       responses: {
         200: { description: "Success" },
         401: { description: "Unauthorized" },

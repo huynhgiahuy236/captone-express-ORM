@@ -20,6 +20,7 @@ import {
   Heart,
   MessageCircle,
   FolderHeart,
+  ChevronDown,
 } from "lucide-react";
 import { DateOfBirthSelect } from "@/components/DateOfBirthSelect";
 import { validateFullName, validateDMY } from "@/lib/validation";
@@ -453,31 +454,61 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
                       </div>
                     </div>
 
-                    {/* Level Selector Buttons */}
-                    <div className="grid grid-cols-3 gap-2 pt-1">
-                      {levels.map((lvl) => {
-                        const isSelected = privacy[item.key] === lvl.value;
-                        return (
-                          <button
-                            key={lvl.value}
-                            type="button"
-                            onClick={() =>
-                              setPrivacy((prev) => ({
-                                ...prev,
-                                [item.key]: lvl.value,
-                              }))
-                            }
-                            className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl text-[11px] sm:text-xs font-bold transition cursor-pointer border ${
-                              isSelected
-                                ? "bg-[#0052cc] text-white border-[#0052cc] shadow-xs"
-                                : "bg-white dark:bg-[#252A42] text-gray-700 dark:text-gray-300 border-gray-200 dark:border-[#2d2f40] hover:border-[#0052cc]/40"
-                            }`}
-                          >
-                            {lvl.icon}
-                            <span className="truncate">{lvl.label}</span>
-                          </button>
-                        );
-                      })}
+                    {/* Level Selector: Select dropdown on Mobile (< sm), 3-button grid on Desktop (sm:) */}
+                    <div className="pt-1">
+                      {/* 1. Mobile View (< sm): Clean Select Option Dropdown */}
+                      <div className="relative block sm:hidden">
+                        <select
+                          value={privacy[item.key]}
+                          onChange={(e) =>
+                            setPrivacy((prev) => ({
+                              ...prev,
+                              [item.key]: e.target.value as "PUBLIC" | "FOLLOWERS" | "PRIVATE",
+                            }))
+                          }
+                          className="w-full appearance-none rounded-xl bg-white dark:bg-[#252A42] border border-gray-200 dark:border-[#2d2f40] px-3.5 py-2.5 text-xs font-bold text-gray-900 dark:text-white focus:outline-hidden focus:border-[#0052cc] focus:ring-2 focus:ring-blue-500/20 transition cursor-pointer pr-9 shadow-xs"
+                        >
+                          <option value="PUBLIC" className="bg-white dark:bg-[#1c2136] text-gray-900 dark:text-white py-1">
+                            🌐 Mọi người (Công khai)
+                          </option>
+                          <option value="FOLLOWERS" className="bg-white dark:bg-[#1c2136] text-gray-900 dark:text-white py-1">
+                            👥 Chỉ người theo dõi (Followers)
+                          </option>
+                          <option value="PRIVATE" className="bg-white dark:bg-[#1c2136] text-gray-900 dark:text-white py-1">
+                            🔒 Chỉ mình tôi (Riêng tư)
+                          </option>
+                        </select>
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+                          <ChevronDown size={15} />
+                        </div>
+                      </div>
+
+                      {/* 2. Desktop View (sm:): 3-Button Grid */}
+                      <div className="hidden sm:grid sm:grid-cols-3 gap-2">
+                        {levels.map((lvl) => {
+                          const isSelected = privacy[item.key] === lvl.value;
+                          return (
+                            <button
+                              key={lvl.value}
+                              type="button"
+                              onClick={() =>
+                                setPrivacy((prev) => ({
+                                  ...prev,
+                                  [item.key]: lvl.value,
+                                }))
+                              }
+                              className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl text-xs font-bold transition cursor-pointer border ${
+                                isSelected
+                                  ? "bg-[#0052cc] text-white border-[#0052cc] shadow-xs"
+                                  : "bg-white dark:bg-[#252A42] text-gray-700 dark:text-gray-300 border-gray-200 dark:border-[#2d2f40] hover:border-[#0052cc]/40"
+                              }`}
+                            >
+                              {lvl.icon}
+                              <span className="truncate">{lvl.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 ))}

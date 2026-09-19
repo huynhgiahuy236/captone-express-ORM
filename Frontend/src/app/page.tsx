@@ -199,9 +199,9 @@ function HomeContent() {
 
           {/* Khung chứa các nút thể loại còn lại có nút mũi tên điều hướng */}
           <div className="relative flex-1 min-w-0 flex items-center">
-            {/* Nút mũi tên Trái */}
+            {/* Nút mũi tên Trái - Ẩn trên mobile (người dùng vuốt tay) */}
             {canScrollLeft && (
-              <div className="absolute left-0 z-10 flex items-center pr-4 bg-gradient-to-r from-white via-white/95 to-transparent dark:from-[#0B0F19] dark:via-[#0B0F19]/95 dark:to-transparent h-full">
+              <div className="hidden sm:flex absolute left-0 z-10 items-center pr-4 bg-gradient-to-r from-white via-white/95 to-transparent dark:from-[#0B0F19] dark:via-[#0B0F19]/95 dark:to-transparent h-full">
                 <button
                   type="button"
                   onClick={() => handleScroll("left")}
@@ -252,9 +252,9 @@ function HomeContent() {
               })}
             </div>
 
-            {/* Nút mũi tên Phải */}
+            {/* Nút mũi tên Phải - Ẩn trên mobile (người dùng vuốt tay) */}
             {canScrollRight && (
-              <div className="absolute right-0 z-10 flex items-center pl-4 bg-gradient-to-l from-white via-white/95 to-transparent dark:from-[#0B0F19] dark:via-[#0B0F19]/95 dark:to-transparent h-full">
+              <div className="hidden sm:flex absolute right-0 z-10 items-center pl-4 bg-gradient-to-l from-white via-white/95 to-transparent dark:from-[#0B0F19] dark:via-[#0B0F19]/95 dark:to-transparent h-full">
                 <button
                   type="button"
                   onClick={() => handleScroll("right")}

@@ -2,6 +2,7 @@ export const authSwagger = {
   "/api/auth/signup": {
     post: {
       tags: ["Auth"],
+      summary: "Register new user account",
       requestBody: {
         required: true,
         content: {
@@ -30,6 +31,7 @@ export const authSwagger = {
   "/api/auth/signin": {
     post: {
       tags: ["Auth"],
+      summary: "Sign in with email and password",
       requestBody: {
         required: true,
         content: {
@@ -56,6 +58,7 @@ export const authSwagger = {
   "/api/auth/refresh-token": {
     post: {
       tags: ["Auth"],
+      summary: "Refresh access token",
       requestBody: {
         content: {
           "application/json": {
@@ -80,7 +83,16 @@ export const authSwagger = {
   "/api/auth/info": {
     get: {
       tags: ["Auth"],
-      security: [{ bearerAuth: [] }],
+      summary: "Get current user profile information",
+      parameters: [
+        {
+          name: "token",
+          in: "header",
+          description: "Access Token",
+          required: false,
+          schema: { type: "string" },
+        },
+      ],
       responses: {
         200: { description: "Success" },
         401: { description: "Unauthorized" },

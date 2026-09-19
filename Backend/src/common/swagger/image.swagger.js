@@ -2,6 +2,7 @@ export const imageSwagger = {
   "/api/images": {
     get: {
       tags: ["Images"],
+      summary: "Get list of images with pagination and search filter",
       parameters: [
         {
           name: "page",
@@ -16,7 +17,7 @@ export const imageSwagger = {
         {
           name: "search",
           in: "query",
-          schema: { type: "string", example: "dog" },
+          schema: { type: "string", example: "" },
         },
       ],
       responses: {
@@ -28,7 +29,16 @@ export const imageSwagger = {
     },
     post: {
       tags: ["Images"],
-      security: [{ bearerAuth: [] }],
+      summary: "Upload new image",
+      parameters: [
+        {
+          name: "token",
+          in: "header",
+          description: "Access Token",
+          required: false,
+          schema: { type: "string" },
+        },
+      ],
       requestBody: {
         required: true,
         content: {
@@ -57,11 +67,12 @@ export const imageSwagger = {
   "/api/images/search": {
     get: {
       tags: ["Images"],
+      summary: "Search images by name",
       parameters: [
         {
           name: "name",
           in: "query",
-          schema: { type: "string", example: "dog" },
+          schema: { type: "string", example: "cat" },
         },
       ],
       responses: {
@@ -74,6 +85,7 @@ export const imageSwagger = {
   "/api/images/{id}": {
     get: {
       tags: ["Images"],
+      summary: "Get image details by ID",
       parameters: [
         {
           name: "id",
@@ -91,13 +103,20 @@ export const imageSwagger = {
     },
     delete: {
       tags: ["Images"],
-      security: [{ bearerAuth: [] }],
+      summary: "Delete image created by user",
       parameters: [
         {
           name: "id",
           in: "path",
           required: true,
           schema: { type: "integer", example: 1 },
+        },
+        {
+          name: "token",
+          in: "header",
+          description: "Access Token",
+          required: false,
+          schema: { type: "string" },
         },
       ],
       responses: {

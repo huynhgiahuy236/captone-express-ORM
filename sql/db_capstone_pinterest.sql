@@ -151,6 +151,25 @@ CREATE TABLE IF NOT EXISTS `theo_doi` (
 );
 
 -- ======================================================
+-- 9. Tạo Bảng: thong_bao (Thông báo tương tác)
+-- ======================================================
+CREATE TABLE IF NOT EXISTS `thong_bao` (
+	`thong_bao_id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	`nguoi_gui_id` INT NOT NULL,
+	`nguoi_nhan_id` INT NOT NULL,
+	`hinh_id` INT NULL,
+	`loai` VARCHAR(50) NOT NULL, -- 'LIKE' | 'COMMENT'
+	`noi_dung` TEXT NOT NULL,
+	`da_doc` TINYINT(1) NOT NULL DEFAULT 0,
+	`createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+	FOREIGN KEY (`nguoi_gui_id`) REFERENCES `nguoi_dung`(`nguoi_dung_id`) ON DELETE CASCADE,
+	FOREIGN KEY (`nguoi_nhan_id`) REFERENCES `nguoi_dung`(`nguoi_dung_id`) ON DELETE CASCADE,
+	FOREIGN KEY (`hinh_id`) REFERENCES `hinh_anh`(`hinh_id`) ON DELETE CASCADE
+);
+
+-- ======================================================
 -- 9. DỮ LIỆU MẪU SINH ĐỘNG (SEED / MOCK DATA)
 -- Mật khẩu mẫu cho tất cả tài khoản bên dưới là: 123456
 -- (Đã băm bằng bcrypt: $2b$10$t.cHgqiftehsWXmiDwCi3OTNHDvnxh.E/WXcL96iKlv.9Rn73dr46)
