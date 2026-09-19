@@ -1,0 +1,140 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/common/prisma/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model nguoi_dung {
+  nguoi_dung_id     Int          @id @default(autoincrement())
+  email             String       @unique(map: "email") @db.VarChar(255)
+  mat_khau          String?      @db.VarChar(255)
+  ho_ten            String?      @db.VarChar(255)
+  tuoi              Int?
+  anh_dai_dien      String?      @db.Text
+  mo_ta             String?      @db.Text
+  google_id         String?      @db.VarChar(255)
+  deletedBy         Int          @default(0)
+  isDeleted         Boolean      @default(false)
+  deletedAt         DateTime?    @db.Timestamp(0)
+  createdAt         DateTime     @default(now()) @db.Timestamp(0)
+  updatedAt         DateTime     @default(now()) @db.Timestamp(0)
+  binh_luan         binh_luan[]
+  hinh_anh          hinh_anh[]
+  luu_anh           luu_anh[]
+  tym_anh           tym_anh[]
+  tym_binh_luan     tym_binh_luan[]
+  thong_bao_gui     thong_bao[]  @relation("ThongBaoNguoiGui")
+  thong_bao_nhan    thong_bao[]  @relation("ThongBaoNguoiNhan")
+}
+
+model hinh_anh {
+  hinh_id       Int          @id @default(autoincrement())
+  ten_hinh      String       @db.VarChar(255)
+  duong_dan     String       @db.Text
+  mo_ta         String?      @db.Text
+  the_loai      String?      @db.VarChar(100)
+  nguoi_dung_id Int
+  deletedBy     Int          @default(0)
+  isDeleted     Boolean      @default(false)
+  deletedAt     DateTime?    @db.Timestamp(0)
+  createdAt     DateTime     @default(now()) @db.Timestamp(0)
+  updatedAt     DateTime     @default(now()) @db.Timestamp(0)
+  nguoi_dung    nguoi_dung   @relation(fields: [nguoi_dung_id], references: [nguoi_dung_id], onDelete: Cascade, onUpdate: NoAction, map: "hinh_anh_ibfk_1")
+  binh_luan     binh_luan[]
+  luu_anh       luu_anh[]
+  tym_anh       tym_anh[]
+  thong_bao     thong_bao[]
+
+  @@index([nguoi_dung_id], map: "nguoi_dung_id")
+}
+
+model binh_luan {
+  binh_luan_id   Int             @id @default(autoincrement())
+  nguoi_dung_id  Int
+  hinh_id        Int
+  ngay_binh_luan DateTime        @default(now()) @db.Timestamp(0)
+  noi_dung       String          @db.Text
+  deletedBy      Int             @default(0)
+  isDeleted      Boolean         @default(false)
+  deletedAt      DateTime?       @db.Timestamp(0)
+  createdAt      DateTime        @default(now()) @db.Timestamp(0)
+  updatedAt      DateTime        @default(now()) @db.Timestamp(0)
+  nguoi_dung     nguoi_dung      @relation(fields: [nguoi_dung_id], references: [nguoi_dung_id], onDelete: Cascade, onUpdate: NoAction, map: "binh_luan_ibfk_1")
+  hinh_anh       hinh_anh        @relation(fields: [hinh_id], references: [hinh_id], onDelete: Cascade, onUpdate: NoAction, map: "binh_luan_ibfk_2")
+  tym_binh_luan  tym_binh_luan[]
+
+  @@index([hinh_id], map: "hinh_id")
+  @@index([nguoi_dung_id], map: "nguoi_dung_id")
+}
+
+model luu_anh {
+  nguoi_dung_id Int
+  hinh_id       Int
+  ngay_luu      DateTime   @default(now()) @db.Timestamp(0)
+  deletedBy     Int        @default(0)
+  isDeleted     Boolean    @default(false)
+  deletedAt     DateTime?  @db.Timestamp(0)
+  createdAt     DateTime   @default(now()) @db.Timestamp(0)
+  updatedAt     DateTime   @default(now()) @db.Timestamp(0)
+  nguoi_dung    nguoi_dung @relation(fields: [nguoi_dung_id], references: [nguoi_dung_id], onDelete: Cascade, onUpdate: NoAction, map: "luu_anh_ibfk_1")
+  hinh_anh      hinh_anh   @relation(fields: [hinh_id], references: [hinh_id], onDelete: Cascade, onUpdate: NoAction, map: "luu_anh_ibfk_2")
+
+  @@id([nguoi_dung_id, hinh_id])
+  @@index([hinh_id], map: "luu_anh_hinh_id")
+}
+
+model tym_anh {
+  nguoi_dung_id Int
+  hinh_id       Int
+  ngay_tym      DateTime   @default(now()) @db.Timestamp(0)
+  deletedBy     Int        @default(0)
+  isDeleted     Boolean    @default(false)
+  deletedAt     DateTime?  @db.Timestamp(0)
+  createdAt     DateTime   @default(now()) @db.Timestamp(0)
+  updatedAt     DateTime   @default(now()) @db.Timestamp(0)
+  nguoi_dung    nguoi_dung @relation(fields: [nguoi_dung_id], references: [nguoi_dung_id], onDelete: Cascade, onUpdate: NoAction)
+  hinh_anh      hinh_anh   @relation(fields: [hinh_id], references: [hinh_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([nguoi_dung_id, hinh_id])
+  @@index([hinh_id], map: "tym_anh_hinh_id")
+}
+
+model tym_binh_luan {
+  nguoi_dung_id Int
+  binh_luan_id  Int
+  ngay_tym      DateTime   @default(now()) @db.Timestamp(0)
+  deletedBy     Int        @default(0)
+  isDeleted     Boolean    @default(false)
+  deletedAt     DateTime?  @db.Timestamp(0)
+  createdAt     DateTime   @default(now()) @db.Timestamp(0)
+  updatedAt     DateTime   @default(now()) @db.Timestamp(0)
+  nguoi_dung    nguoi_dung @relation(fields: [nguoi_dung_id], references: [nguoi_dung_id], onDelete: Cascade, onUpdate: NoAction)
+  binh_luan     binh_luan  @relation(fields: [binh_luan_id], references: [binh_luan_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([nguoi_dung_id, binh_luan_id])
+  @@index([binh_luan_id], map: "tym_binh_luan_id")
+}
+
+model thong_bao {
+  thong_bao_id  Int        @id @default(autoincrement())
+  nguoi_gui_id  Int
+  nguoi_nhan_id Int
+  hinh_id       Int?
+  loai          String     @db.VarChar(50) // "LIKE" | "COMMENT"
+  noi_dung      String     @db.Text
+  da_doc        Boolean    @default(false)
+  createdAt     DateTime   @default(now()) @db.Timestamp(0)
+  updatedAt     DateTime   @default(now()) @db.Timestamp(0)
+
+  nguoi_gui     nguoi_dung @relation("ThongBaoNguoiGui", fields: [nguoi_gui_id], references: [nguoi_dung_id], onDelete: Cascade, onUpdate: NoAction)
+  nguoi_nhan    nguoi_dung @relation("ThongBaoNguoiNhan", fields: [nguoi_nhan_id], references: [nguoi_dung_id], onDelete: Cascade, onUpdate: NoAction)
+  hinh_anh      hinh_anh?  @relation(fields: [hinh_id], references: [hinh_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([nguoi_nhan_id], map: "nguoi_nhan_id")
+  @@index([nguoi_gui_id], map: "nguoi_gui_id")
+  @@index([hinh_id], map: "hinh_id")
+}

@@ -1,0 +1,65 @@
+<svg width="800" height="1000" viewBox="0 0 800 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F5132" />
+      <stop offset="50%" stop-color="#1E7A4B" />
+      <stop offset="100%" stop-color="#0A3622" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#A7E3B1" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#0F5132" stop-opacity="0" />
+    </radialGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="800" height="1000" rx="32" fill="url(#bg-gradient)" />
+  <rect width="800" height="1000" rx="32" fill="url(#glow)" />
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.06">
+    <circle cx="200" cy="200" r="150" stroke="#FFFFFF" stroke-width="2" />
+    <circle cx="600" cy="800" r="220" stroke="#FFFFFF" stroke-width="2" />
+    <circle cx="400" cy="450" r="300" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="8 8" />
+  </g>
+
+  <!-- Central Cura Brand Card -->
+  <g transform="translate(260, 300)" filter="url(#shadow)">
+    <!-- Back Shadow / Folder 3D Edge -->
+    <rect x="36" y="24" width="200" height="230" rx="48" fill="#062215" />
+    <!-- Main Folder Front -->
+    <rect x="16" y="32" width="200" height="224" rx="48" fill="#1E7A4B" />
+    <!-- Top Folder Tab -->
+    <path d="M 52 32 C 52 14, 70 6, 92 6 L 124 6 C 146 6, 158 16, 164 32 Z" fill="#1E7A4B" />
+    <!-- Bookmark Ribbon -->
+    <path d="M 116 6 L 168 6 L 168 120 L 142 98 L 116 120 Z" fill="#A7E3B1" />
+    <!-- Sparkle Star / Diamond Accent -->
+    <path
+      d="M 158 120 Q 158 152, 190 152 Q 158 152, 158 184 Q 158 152, 126 152 Q 158 152, 158 120 Z"
+      fill="#FFFFFF"
+    />
+    <!-- Small Sparkle Accent -->
+    <path
+      d="M 190 178 Q 190 192, 204 192 Q 190 192, 190 206 Q 190 192, 176 192 Q 190 192, 190 178 Z"
+      fill="#FFFFFF"
+      opacity="0.9"
+    />
+  </g>
+
+  <!-- Brand Typography -->
+  <text x="400" y="620" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="72" fill="#FFFFFF" letter-spacing="-1">
+    cura
+  </text>
+  
+  <text x="400" y="665" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="18" fill="#A7E3B1" letter-spacing="6">
+    DISCOVERY • SHARE • SAVE
+  </text>
+
+  <!-- Status / Helper text -->
+  <rect x="290" y="720" width="220" height="42" rx="21" fill="rgba(0, 0, 0, 0.25)" />
+  <text x="400" y="747" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="600" font-size="15" fill="#E2F5E6">
+    ✨ Ý tưởng sáng tạo
+  </text>
+</svg>
