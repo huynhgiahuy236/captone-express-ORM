@@ -24,6 +24,8 @@ import {
   Minimize2,
   X,
   Heart,
+  UserPlus,
+  UserCheck,
 } from "lucide-react";
 
 // Individual Comment Row with 3-line clamp, 'Xem thêm' / 'Thu gọn', and Heart Like toggle
@@ -153,9 +155,12 @@ export default function PinDetailPage() {
   const [deleteCountdown, setDeleteCountdown] = useState(5);
   const [loading, setLoading] = useState(true);
   const [relatedPins, setRelatedPins] = useState<ImageItem[]>([]);
+  const [explorePins, setExplorePins] = useState<ImageItem[]>([]);
   const [isTitleExpanded, setIsTitleExpanded] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
+  const [isFollowingAuthor, setIsFollowingAuthor] = useState(false);
+  const [isFollowAuthorLoading, setIsFollowAuthorLoading] = useState(false);
   const commentsContainerRef = useRef<HTMLDivElement>(null);
   const commentTextareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -171,15 +176,7 @@ export default function PinDetailPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Auto-resize comment textarea dynamically as user types
-  useEffect(() => {
-    if (commentTextareaRef.current) {
-      commentTextareaRef.current.style.height = "auto";
-      commentTextareaRef.current.style.height = `${commentTextareaRef.current.scrollHeight}px`;
-    }
-  }, [newComment]);
-
-  // 5-second countdown timer for delete modal
+  // Countdown timer for Delete Confirmation Modal (5s lock)
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (showDeleteModal) {
@@ -194,9 +191,7 @@ export default function PinDetailPage() {
         });
       }, 1000);
     }
-    return () => {
-      if (timer) clearInterval(timer);
-    };
+    return () => clearInterval(timer);
   }, [showDeleteModal]);
 
   // Load Pin detail, save status, comments, and related pins
@@ -215,54 +210,44 @@ export default function PinDetailPage() {
       const commentRes = await api.get(`/comments/image/${id}`);
       setComments(commentRes.data?.data || []);
 
-      // If logged in, check save status
-      if (user) {
+      // If logged in, check save & follow status
+      if (user && pinData) {
         try {
-          const saveRes = await api.get(`/saved-images/check/${id}`);
+          const [saveRes, followRes] = await Promise.all([
+            api.get(`/saved-images/check/${id}`).catch(() => ({ data: { data: { isSaved: false } } })),
+            pinData.nguoi_dung_id !== user.nguoi_dung_id
+              ? api.get(`/follow/status/${pinData.nguoi_dung_id}`).catch(() => ({ data: { data: { isFollowing: false } } }))
+              : Promise.resolve({ data: { data: { isFollowing: false } } }),
+          ]);
           setIsSaved(saveRes.data?.data?.isSaved || false);
+          setIsFollowingAuthor(Boolean(followRes.data?.data?.isFollowing));
         } catch (e) {
-          console.error("Check save error", e);
+          console.error("Check save/follow error", e);
         }
       }
 
-      // Fetch related pins with smart category & theme matching
+      // Fetch all pins for matching
       const relatedRes = await api.get("/images?pageSize=50");
       const allPins: ImageItem[] = relatedRes.data?.data?.items || relatedRes.data?.data || [];
       const otherPins = allPins.filter((p: ImageItem) => p.hinh_id !== Number(id));
 
+      // LỌC CHÍNH XÁC 100% THEO THỂ LOẠI (STRICT CATEGORY MATCHING ONLY)
       const targetCategory = (pinData?.the_loai || "").trim().toLowerCase();
-      const targetAuthorId = pinData?.nguoi_dung_id;
-      const targetWords = (pinData?.ten_hinh || "")
-        .toLowerCase()
-        .replace(/[^\p{L}\p{N}\s]/gu, "")
-        .split(/\s+/)
-        .filter((w: string) => w.length > 2);
 
-      const scoredPins = otherPins.map((p) => {
-        let score = 0;
+      const strictlyRelated: ImageItem[] = [];
+      const otherDiscovery: ImageItem[] = [];
+
+      for (const p of otherPins) {
         const pCategory = (p.the_loai || "").trim().toLowerCase();
-
-        // Cùng thể loại được ưu tiên hàng đầu (+15 điểm)
         if (targetCategory && pCategory && pCategory === targetCategory) {
-          score += 15;
+          strictlyRelated.push(p);
+        } else {
+          otherDiscovery.push(p);
         }
-        // Cùng tác giả tạo ảnh (+3 điểm)
-        if (targetAuthorId && p.nguoi_dung_id === targetAuthorId) {
-          score += 3;
-        }
-        // Khớp từ khóa trong tên ảnh (+2 điểm mỗi từ)
-        const pTitle = (p.ten_hinh || "").toLowerCase();
-        for (const word of targetWords) {
-          if (pTitle.includes(word)) {
-            score += 2;
-          }
-        }
-        return { pin: p, score };
-      });
+      }
 
-      // Sắp xếp điểm cao nhất lên đầu (ảnh cùng loại đứng đầu)
-      scoredPins.sort((a, b) => b.score - a.score);
-      setRelatedPins(scoredPins.map((item) => item.pin));
+      setRelatedPins(strictlyRelated);
+      setExplorePins(otherDiscovery);
     } catch (err: any) {
       if (err.response?.status === 404) {
         setPin(null);
@@ -335,6 +320,16 @@ export default function PinDetailPage() {
 
   const [commentError, setCommentError] = useState<string | null>(null);
 
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const target = e.target;
+    setNewComment(target.value);
+    if (commentError) setCommentError(null);
+
+    // Dynamic auto-grow with max height without blocking layout
+    target.style.height = "auto";
+    target.style.height = `${Math.min(target.scrollHeight, 180)}px`;
+  };
+
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setCommentError(null);
@@ -372,6 +367,9 @@ export default function PinDetailPage() {
           ...prev,
         ]);
         setNewComment("");
+        if (commentTextareaRef.current) {
+          commentTextareaRef.current.style.height = "auto";
+        }
         toast.success("Đã gửi bình luận!");
         setTimeout(() => {
           commentsContainerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
@@ -381,6 +379,29 @@ export default function PinDetailPage() {
       setCommentError(err.response?.data?.message || "Không thể gửi bình luận, vui lòng thử lại");
     } finally {
       setIsSubmittingComment(false);
+    }
+  };
+
+  const handleToggleAuthorFollow = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!user) {
+      toast.error("Vui lòng đăng nhập để theo dõi tác giả!");
+      return;
+    }
+    if (!pin?.nguoi_dung_id || isFollowAuthorLoading) return;
+
+    setIsFollowAuthorLoading(true);
+    try {
+      const res = await api.post(`/follow/${pin.nguoi_dung_id}`);
+      if (res.data?.data) {
+        setIsFollowingAuthor(res.data.data.isFollowing);
+        toast.success(res.data.data.message || (res.data.data.isFollowing ? "Đã theo dõi tác giả!" : "Đã hủy theo dõi!"));
+      }
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Không thể thực hiện thao tác theo dõi");
+    } finally {
+      setIsFollowAuthorLoading(false);
     }
   };
 
@@ -428,8 +449,7 @@ export default function PinDetailPage() {
   }
 
   const isOwner = user && user.nguoi_dung_id === pin.nguoi_dung_id;
-  const sidebarPins = relatedPins.slice(0, 4);
-  const explorePins = relatedPins.slice(4);
+  const sidebarPins = relatedPins;
 
   return (
     <div className="max-w-[1920px] 2xl:max-w-[2100px] w-full mx-auto px-3 sm:px-6 lg:px-8 xl:px-10 py-4">
@@ -532,8 +552,22 @@ export default function PinDetailPage() {
               </button>
             </div>
 
+            {/* Category Tag Badge */}
+            {pin.the_loai && (
+              <div className="mt-4 flex items-center gap-2">
+                <Link
+                  href={`/category/${encodeURIComponent(pin.the_loai)}`}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 hover:bg-blue-100 dark:bg-[#252A42] dark:hover:bg-[#2e3450] text-[#0052cc] dark:text-blue-400 border border-blue-100/60 dark:border-[#2D2F40] shadow-xs transition cursor-pointer"
+                  title={`Xem tất cả tác phẩm thuộc chủ đề ${pin.the_loai}`}
+                >
+                  <span className="opacity-75">Chủ đề:</span>
+                  <span className="font-extrabold underline decoration-blue-300 dark:decoration-blue-700 underline-offset-2">{pin.the_loai}</span>
+                </Link>
+              </div>
+            )}
+
             {/* Pin Title & Description with 4-line and 3-line clamp */}
-            <div className="mt-5 space-y-2.5">
+            <div className="mt-3 space-y-2.5">
               {/* Title */}
               <div className="relative">
                 <h1
@@ -591,40 +625,70 @@ export default function PinDetailPage() {
               )}
             </div>
 
-            {/* Author Profile */}
+            {/* Author Profile with Follow Button */}
             {pin.nguoi_dung && (
-              <Link
-                href={
-                  user?.nguoi_dung_id === pin.nguoi_dung.nguoi_dung_id
-                    ? "/profile"
-                    : `/profile/${pin.nguoi_dung.nguoi_dung_id}`
-                }
-                className="mt-5 flex items-center gap-3 p-2.5 rounded-2xl bg-gray-50 dark:bg-[#181C31] border border-gray-100 dark:border-[#2d2f40] group hover:border-[#0052cc]/30 transition"
-              >
-                <div className="h-10 w-10 overflow-hidden rounded-full border border-gray-200 dark:border-[#2d2f40] bg-gray-100 dark:bg-[#181C31] shrink-0">
-                  {pin.nguoi_dung.anh_dai_dien ? (
-                    <img
-                      src={pin.nguoi_dung.anh_dai_dien}
-                      alt={pin.nguoi_dung.ho_ten || "Author"}
-                      referrerPolicy="no-referrer"
-                      className="h-full w-full object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = "none";
-                      }}
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-blue-50 dark:bg-[#252A42] font-bold text-[#0052cc] dark:text-blue-400 text-sm">
-                      {(pin.nguoi_dung.ho_ten || pin.nguoi_dung.email || "U")[0].toUpperCase()}
-                    </div>
-                  )}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h4 className="font-bold text-sm text-gray-900 dark:text-white group-hover:text-[#0052cc] dark:group-hover:text-blue-400 transition truncate">
-                    {pin.nguoi_dung.ho_ten || "Tác giả"}
-                  </h4>
-                  <p className="text-[11px] text-gray-500 dark:text-gray-400 truncate">{pin.nguoi_dung.email}</p>
-                </div>
-              </Link>
+              <div className="mt-5 flex items-center justify-between gap-3 p-3 rounded-2xl bg-gray-50 dark:bg-[#181C31] border border-gray-100 dark:border-[#2d2f40]">
+                <Link
+                  href={
+                    user?.nguoi_dung_id === pin.nguoi_dung.nguoi_dung_id
+                      ? "/profile"
+                      : `/profile/${pin.nguoi_dung.nguoi_dung_id}`
+                  }
+                  className="flex items-center gap-3 min-w-0 flex-1 group"
+                >
+                  <div className="h-10 w-10 overflow-hidden rounded-full border border-gray-200 dark:border-[#2d2f40] bg-gray-100 dark:bg-[#181C31] shrink-0">
+                    {pin.nguoi_dung.anh_dai_dien ? (
+                      <img
+                        src={pin.nguoi_dung.anh_dai_dien}
+                        alt={pin.nguoi_dung.ho_ten || "Author"}
+                        referrerPolicy="no-referrer"
+                        className="h-full w-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = "none";
+                        }}
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-blue-50 dark:bg-[#252A42] font-bold text-[#0052cc] dark:text-blue-400 text-sm">
+                        {(pin.nguoi_dung.ho_ten || pin.nguoi_dung.email || "U")[0].toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h4 className="font-bold text-sm text-gray-900 dark:text-white group-hover:text-[#0052cc] dark:group-hover:text-blue-400 transition truncate">
+                      {pin.nguoi_dung.ho_ten || "Tác giả"}
+                    </h4>
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400 truncate">{pin.nguoi_dung.email}</p>
+                  </div>
+                </Link>
+
+                {/* Follow Button (if not author yourself) */}
+                {user?.nguoi_dung_id !== pin.nguoi_dung.nguoi_dung_id && (
+                  <button
+                    type="button"
+                    onClick={handleToggleAuthorFollow}
+                    disabled={isFollowAuthorLoading}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shrink-0 ${
+                      isFollowingAuthor
+                        ? "bg-gray-200 dark:bg-[#252A42] text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-[#2e3450]"
+                        : "bg-[#0052cc] hover:bg-[#0041a8] text-white shadow-xs"
+                    }`}
+                  >
+                    {isFollowAuthorLoading ? (
+                      <Loader2 size={13} className="animate-spin" />
+                    ) : isFollowingAuthor ? (
+                      <>
+                        <UserCheck size={13} className="text-[#0052cc] dark:text-blue-400" />
+                        <span>Đang theo dõi</span>
+                      </>
+                    ) : (
+                      <>
+                        <UserPlus size={13} />
+                        <span>Theo dõi</span>
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
             )}
 
             {/* Comments Section below Pin inside the Left Card */}
@@ -649,13 +713,9 @@ export default function PinDetailPage() {
                   <textarea
                     ref={commentTextareaRef}
                     rows={1}
-                    wrap="soft"
                     placeholder={user ? "Thêm nhận xét của bạn... (Enter gửi, Shift+Enter xuống dòng)" : "Đăng nhập để bình luận..."}
                     value={newComment}
-                    onChange={(e) => {
-                      setNewComment(e.target.value);
-                      if (commentError) setCommentError(null);
-                    }}
+                    onChange={handleCommentChange}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault();
@@ -663,8 +723,7 @@ export default function PinDetailPage() {
                       }
                     }}
                     disabled={!user || isSubmittingComment}
-                    style={{ wordBreak: "break-all", overflowWrap: "anywhere", whiteSpace: "pre-wrap" }}
-                    className="w-full bg-transparent border-0 outline-hidden focus:outline-hidden focus:ring-0 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400 text-xs sm:text-sm resize-none overflow-hidden min-h-[28px] max-h-[220px] leading-relaxed break-all block p-0"
+                    className="w-full bg-transparent border-0 outline-hidden focus:outline-hidden focus:ring-0 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400 text-xs sm:text-sm resize-none min-h-[28px] max-h-[180px] leading-relaxed block p-0 [overflow-wrap:anywhere] [word-break:break-word] overflow-y-auto"
                   />
 
                   <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-200/40 dark:border-white/5">
@@ -712,17 +771,40 @@ export default function PinDetailPage() {
         <div className="flex-1 min-w-0 w-full">
           <div className="mb-4 flex items-center justify-between pb-2 border-b border-gray-100 dark:border-[#2d2f40]">
             <h2 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-              <Sparkles className="text-[#0052cc] dark:text-blue-400" size={18} />
-              <span>Các ý tưởng liên quan</span>
+              {pin.the_loai ? (
+                <span>
+                  Ý tưởng liên quan về{" "}
+                  <Link
+                    href={`/category/${encodeURIComponent(pin.the_loai)}`}
+                    className="text-[#0052cc] hover:text-[#0041a8] dark:text-blue-400 dark:hover:text-blue-300 font-extrabold underline decoration-blue-300 dark:decoration-blue-700 underline-offset-4 cursor-pointer transition"
+                    title={`Mở trang riêng thể loại ${pin.the_loai}`}
+                  >
+                    {pin.the_loai}
+                  </Link>
+                </span>
+              ) : (
+                <span>Các ý tưởng liên quan</span>
+              )}
             </h2>
             <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">
               {sidebarPins.length} ý tưởng
             </span>
           </div>
-          <MasonryGrid
-            pins={sidebarPins}
-            className="w-full columns-2 sm:columns-2 md:columns-2 lg:columns-2 xl:columns-4 gap-4 [column-fill:_balance]"
-          />
+          {sidebarPins.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 px-4 text-center rounded-3xl bg-gray-50/70 dark:bg-[#181C31]/50 border border-dashed border-gray-200 dark:border-[#2d2f40]">
+              <p className="text-sm font-bold text-gray-800 dark:text-gray-200">
+                {pin.the_loai ? `Chưa có thêm ý tưởng liên quan về ${pin.the_loai}` : "Chưa có ý tưởng liên quan nào"}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 max-w-xs">
+                Chủ đề này hiện chưa có thêm hình ảnh tương đồng trong hệ thống.
+              </p>
+            </div>
+          ) : (
+            <MasonryGrid
+              pins={sidebarPins}
+              className="w-full columns-2 sm:columns-2 md:columns-2 lg:columns-2 xl:columns-4 gap-4 [column-fill:_balance]"
+            />
+          )}
         </div>
       </div>
 
@@ -730,9 +812,8 @@ export default function PinDetailPage() {
       {explorePins.length > 0 && (
         <div className="mt-16 pt-10 border-t border-gray-100 dark:border-[#2d2f40]">
           <div className="text-center mb-8 space-y-1">
-            <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white tracking-tight flex items-center justify-center gap-2">
-              <Sparkles className="text-[#0052cc] dark:text-blue-400" size={22} />
-              <span>Khám phá thêm nhiều ý tưởng</span>
+            <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white tracking-tight">
+              Khám phá thêm nhiều ý tưởng
             </h2>
             <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
               Các nguồn cảm hứng đa dạng, phong phú được tuyển chọn dành cho bạn

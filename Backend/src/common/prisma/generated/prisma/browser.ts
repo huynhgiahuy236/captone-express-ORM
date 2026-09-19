@@ -52,3 +52,8 @@ export type tym_binh_luan = Prisma.tym_binh_luanModel
  * 
  */
 export type thong_bao = Prisma.thong_baoModel
+/**
+ * Model theo_doi
+ * 
+ */
+export type theo_doi = Prisma.theo_doiModel

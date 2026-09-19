@@ -21,4 +21,14 @@ export const savedImageController = {
       next(err);
     }
   },
+
+  async batchUnsave(req, res, next) {
+    try {
+      const result = await savedImageService.batchUnsave(req);
+      const response = responseSuccess(result, result.message);
+      res.status(response.statusCode).json(response);
+    } catch (err) {
+      next(err);
+    }
+  },
 };

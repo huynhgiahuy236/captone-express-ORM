@@ -12,6 +12,8 @@ likeRouter.get("/image/check/:imageId", optionalProtect, likeController.checkLik
 likeRouter.post("/comment/toggle/:commentId", protect, likeController.toggleLikeComment);
 
 // Liked lists
+likeRouter.post("/batch-unlike-images", protect, likeController.batchUnlikeImages);
+likeRouter.post("/batch-unlike-comments", protect, likeController.batchUnlikeComments);
 likeRouter.get("/user/images", protect, likeController.getUserLikedImages);
 likeRouter.get("/user/comments", protect, likeController.getUserLikedComments);
 likeRouter.get("/user/:userId/images", likeController.getUserLikedImages);

@@ -183,14 +183,41 @@ export const likeService = {
 
   // ========================== GET USER LIKED LISTS ==========================
   async getUserLikedImages(req) {
-    const userId = Number(req.params.userId || req.user?.nguoi_dung_id);
-    if (!userId) {
+    const targetUserId = req.params.userId ? Number(req.params.userId) : req.user?.nguoi_dung_id;
+    if (!targetUserId) {
       throw new BadRequestException("ID người dùng không hợp lệ");
+    }
+
+    const viewerId = req.user?.nguoi_dung_id;
+    const isSelf = viewerId === targetUserId;
+
+    if (!isSelf) {
+      const targetUser = await prisma.nguoi_dung.findUnique({
+        where: { nguoi_dung_id: targetUserId },
+        select: { quyen_rieng_tu: true },
+      });
+      let priv = { liked_pins: "PUBLIC" };
+      if (targetUser?.quyen_rieng_tu) {
+        try { priv = { ...priv, ...JSON.parse(targetUser.quyen_rieng_tu) }; } catch (e) {}
+      }
+      if (priv.liked_pins === "PRIVATE") return [];
+      if (priv.liked_pins === "FOLLOWERS") {
+        if (!viewerId) return [];
+        const isFollowing = await prisma.theo_doi.findUnique({
+          where: {
+            nguoi_theo_doi_id_nguoi_duoc_theo_doi_id: {
+              nguoi_theo_doi_id: viewerId,
+              nguoi_duoc_theo_doi_id: targetUserId,
+            },
+          },
+        });
+        if (!isFollowing) return [];
+      }
     }
 
     const likedRecords = await prisma.tym_anh.findMany({
       where: {
-        nguoi_dung_id: userId,
+        nguoi_dung_id: targetUserId,
         hinh_anh: {
           isDeleted: false,
         },
@@ -217,14 +244,41 @@ export const likeService = {
   },
 
   async getUserLikedComments(req) {
-    const userId = Number(req.params.userId || req.user?.nguoi_dung_id);
-    if (!userId) {
+    const targetUserId = req.params.userId ? Number(req.params.userId) : req.user?.nguoi_dung_id;
+    if (!targetUserId) {
       throw new BadRequestException("ID người dùng không hợp lệ");
+    }
+
+    const viewerId = req.user?.nguoi_dung_id;
+    const isSelf = viewerId === targetUserId;
+
+    if (!isSelf) {
+      const targetUser = await prisma.nguoi_dung.findUnique({
+        where: { nguoi_dung_id: targetUserId },
+        select: { quyen_rieng_tu: true },
+      });
+      let priv = { liked_comments: "PUBLIC" };
+      if (targetUser?.quyen_rieng_tu) {
+        try { priv = { ...priv, ...JSON.parse(targetUser.quyen_rieng_tu) }; } catch (e) {}
+      }
+      if (priv.liked_comments === "PRIVATE") return [];
+      if (priv.liked_comments === "FOLLOWERS") {
+        if (!viewerId) return [];
+        const isFollowing = await prisma.theo_doi.findUnique({
+          where: {
+            nguoi_theo_doi_id_nguoi_duoc_theo_doi_id: {
+              nguoi_theo_doi_id: viewerId,
+              nguoi_duoc_theo_doi_id: targetUserId,
+            },
+          },
+        });
+        if (!isFollowing) return [];
+      }
     }
 
     const likedRecords = await prisma.tym_binh_luan.findMany({
       where: {
-        nguoi_dung_id: userId,
+        nguoi_dung_id: targetUserId,
         binh_luan: {
           isDeleted: false,
         },
@@ -256,4 +310,41 @@ export const likeService = {
 
     return likedRecords.map((record) => record.binh_luan);
   },
+
+  async batchUnlikeImages(req) {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      throw new BadRequestException("Danh sách ID không hợp lệ");
+    }
+
+    const numIds = ids.map(Number).filter(Boolean);
+
+    await prisma.tym_anh.deleteMany({
+      where: {
+        nguoi_dung_id: req.user.nguoi_dung_id,
+        hinh_id: { in: numIds },
+      },
+    });
+
+    return { message: `Đã bỏ thích thành công ${numIds.length} hình ảnh`, count: numIds.length };
+  },
+
+  async batchUnlikeComments(req) {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      throw new BadRequestException("Danh sách ID không hợp lệ");
+    }
+
+    const numIds = ids.map(Number).filter(Boolean);
+
+    await prisma.tym_binh_luan.deleteMany({
+      where: {
+        nguoi_dung_id: req.user.nguoi_dung_id,
+        binh_luan_id: { in: numIds },
+      },
+    });
+
+    return { message: `Đã bỏ thích thành công ${numIds.length} bình luận`, count: numIds.length };
+  },
 };
+

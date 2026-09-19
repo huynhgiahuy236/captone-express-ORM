@@ -51,4 +51,14 @@ export const userController = {
       next(err);
     }
   },
+
+  async updatePrivacySettings(req, res, next) {
+    try {
+      const result = await userService.updatePrivacySettings(req);
+      const response = responseSuccess(result, "Cập nhật quyền riêng tư thành công");
+      res.status(response.statusCode).json(response);
+    } catch (err) {
+      next(err);
+    }
+  },
 };

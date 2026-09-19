@@ -8,6 +8,7 @@ const savedImageRouter = express.Router();
 savedImageRouter.get("/check/:imageId", optionalProtect, savedImageController.checkSavedImage);
 
 // Lưu hoặc Bỏ lưu ảnh (Toggle)
+savedImageRouter.post("/batch-unsave", protect, savedImageController.batchUnsave);
 savedImageRouter.post("/toggle/:imageId", protect, savedImageController.toggleSaveImage);
 savedImageRouter.post("/:imageId", protect, savedImageController.toggleSaveImage);
 

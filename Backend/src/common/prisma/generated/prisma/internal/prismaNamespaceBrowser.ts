@@ -57,7 +57,8 @@ export const ModelName = {
   luu_anh: 'luu_anh',
   tym_anh: 'tym_anh',
   tym_binh_luan: 'tym_binh_luan',
-  thong_bao: 'thong_bao'
+  thong_bao: 'thong_bao',
+  theo_doi: 'theo_doi'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -85,6 +86,7 @@ export const Nguoi_dungScalarFieldEnum = {
   anh_dai_dien: 'anh_dai_dien',
   mo_ta: 'mo_ta',
   google_id: 'google_id',
+  quyen_rieng_tu: 'quyen_rieng_tu',
   deletedBy: 'deletedBy',
   isDeleted: 'isDeleted',
   deletedAt: 'deletedAt',
@@ -185,6 +187,16 @@ export const Thong_baoScalarFieldEnum = {
 export type Thong_baoScalarFieldEnum = (typeof Thong_baoScalarFieldEnum)[keyof typeof Thong_baoScalarFieldEnum]
 
 
+export const Theo_doiScalarFieldEnum = {
+  theo_doi_id: 'theo_doi_id',
+  nguoi_theo_doi_id: 'nguoi_theo_doi_id',
+  nguoi_duoc_theo_doi_id: 'nguoi_duoc_theo_doi_id',
+  createdAt: 'createdAt'
+} as const
+
+export type Theo_doiScalarFieldEnum = (typeof Theo_doiScalarFieldEnum)[keyof typeof Theo_doiScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -207,7 +219,8 @@ export const nguoi_dungOrderByRelevanceFieldEnum = {
   ho_ten: 'ho_ten',
   anh_dai_dien: 'anh_dai_dien',
   mo_ta: 'mo_ta',
-  google_id: 'google_id'
+  google_id: 'google_id',
+  quyen_rieng_tu: 'quyen_rieng_tu'
 } as const
 
 export type nguoi_dungOrderByRelevanceFieldEnum = (typeof nguoi_dungOrderByRelevanceFieldEnum)[keyof typeof nguoi_dungOrderByRelevanceFieldEnum]

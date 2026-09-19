@@ -1,3 +1,12 @@
+export interface PrivacySettings {
+  created: "PUBLIC" | "FOLLOWERS" | "PRIVATE";
+  saved: "PUBLIC" | "FOLLOWERS" | "PRIVATE";
+  liked_pins: "PUBLIC" | "FOLLOWERS" | "PRIVATE";
+  liked_comments: "PUBLIC" | "FOLLOWERS" | "PRIVATE";
+  followers?: "PUBLIC" | "FOLLOWERS" | "PRIVATE";
+  following?: "PUBLIC" | "FOLLOWERS" | "PRIVATE";
+}
+
 export interface User {
   nguoi_dung_id: number;
   email: string;
@@ -6,6 +15,17 @@ export interface User {
   anh_dai_dien?: string | null;
   mo_ta?: string | null;
   google_id?: string | null;
+  quyen_rieng_tu?: string | null;
+  privacySettings?: PrivacySettings;
+  followersCount?: number;
+  followingCount?: number;
+  isFollowing?: boolean;
+  canViewCreated?: boolean;
+  canViewSaved?: boolean;
+  canViewLikedPins?: boolean;
+  canViewLikedComments?: boolean;
+  canViewFollowers?: boolean;
+  canViewFollowing?: boolean;
   createdAt?: string;
   updatedAt?: string;
   _count?: {
@@ -54,7 +74,7 @@ export interface NotificationItem {
   nguoi_gui_id: number;
   nguoi_nhan_id: number;
   hinh_id?: number | null;
-  loai: "LIKE" | "COMMENT";
+  loai: "LIKE" | "COMMENT" | "FOLLOW";
   noi_dung: string;
   da_doc: boolean;
   createdAt: string;

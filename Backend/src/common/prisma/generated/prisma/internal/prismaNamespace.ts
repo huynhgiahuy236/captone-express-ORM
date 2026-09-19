@@ -403,7 +403,8 @@ export const ModelName = {
   luu_anh: 'luu_anh',
   tym_anh: 'tym_anh',
   tym_binh_luan: 'tym_binh_luan',
-  thong_bao: 'thong_bao'
+  thong_bao: 'thong_bao',
+  theo_doi: 'theo_doi'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -419,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "nguoi_dung" | "hinh_anh" | "binh_luan" | "luu_anh" | "tym_anh" | "tym_binh_luan" | "thong_bao"
+    modelProps: "nguoi_dung" | "hinh_anh" | "binh_luan" | "luu_anh" | "tym_anh" | "tym_binh_luan" | "thong_bao" | "theo_doi"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -885,6 +886,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    theo_doi: {
+      payload: Prisma.$theo_doiPayload<ExtArgs>
+      fields: Prisma.theo_doiFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.theo_doiFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$theo_doiPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.theo_doiFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$theo_doiPayload>
+        }
+        findFirst: {
+          args: Prisma.theo_doiFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$theo_doiPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.theo_doiFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$theo_doiPayload>
+        }
+        findMany: {
+          args: Prisma.theo_doiFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$theo_doiPayload>[]
+        }
+        create: {
+          args: Prisma.theo_doiCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$theo_doiPayload>
+        }
+        createMany: {
+          args: Prisma.theo_doiCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.theo_doiDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$theo_doiPayload>
+        }
+        update: {
+          args: Prisma.theo_doiUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$theo_doiPayload>
+        }
+        deleteMany: {
+          args: Prisma.theo_doiDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.theo_doiUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.theo_doiUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$theo_doiPayload>
+        }
+        aggregate: {
+          args: Prisma.Theo_doiAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTheo_doi>
+        }
+        groupBy: {
+          args: Prisma.theo_doiGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Theo_doiGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.theo_doiCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Theo_doiCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -933,6 +1000,7 @@ export const Nguoi_dungScalarFieldEnum = {
   anh_dai_dien: 'anh_dai_dien',
   mo_ta: 'mo_ta',
   google_id: 'google_id',
+  quyen_rieng_tu: 'quyen_rieng_tu',
   deletedBy: 'deletedBy',
   isDeleted: 'isDeleted',
   deletedAt: 'deletedAt',
@@ -1033,6 +1101,16 @@ export const Thong_baoScalarFieldEnum = {
 export type Thong_baoScalarFieldEnum = (typeof Thong_baoScalarFieldEnum)[keyof typeof Thong_baoScalarFieldEnum]
 
 
+export const Theo_doiScalarFieldEnum = {
+  theo_doi_id: 'theo_doi_id',
+  nguoi_theo_doi_id: 'nguoi_theo_doi_id',
+  nguoi_duoc_theo_doi_id: 'nguoi_duoc_theo_doi_id',
+  createdAt: 'createdAt'
+} as const
+
+export type Theo_doiScalarFieldEnum = (typeof Theo_doiScalarFieldEnum)[keyof typeof Theo_doiScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1055,7 +1133,8 @@ export const nguoi_dungOrderByRelevanceFieldEnum = {
   ho_ten: 'ho_ten',
   anh_dai_dien: 'anh_dai_dien',
   mo_ta: 'mo_ta',
-  google_id: 'google_id'
+  google_id: 'google_id',
+  quyen_rieng_tu: 'quyen_rieng_tu'
 } as const
 
 export type nguoi_dungOrderByRelevanceFieldEnum = (typeof nguoi_dungOrderByRelevanceFieldEnum)[keyof typeof nguoi_dungOrderByRelevanceFieldEnum]
@@ -1284,6 +1363,7 @@ export type GlobalOmitConfig = {
   tym_anh?: Prisma.tym_anhOmit
   tym_binh_luan?: Prisma.tym_binh_luanOmit
   thong_bao?: Prisma.thong_baoOmit
+  theo_doi?: Prisma.theo_doiOmit
 }
 
 /* Types for Logging */

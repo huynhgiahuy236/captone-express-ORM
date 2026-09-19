@@ -8,12 +8,24 @@ interface MasonryGridProps {
   pins: ImageItem[];
   onSaveToggle?: (pinId: number, isSaved: boolean) => void;
   className?: string;
+  isSelectMode?: boolean;
+  selectedIds?: number[];
+  onToggleSelect?: (pinId: number) => void;
 }
 
-export const MasonryGrid: React.FC<MasonryGridProps> = ({ pins, onSaveToggle, className }) => {
+export const MasonryGrid: React.FC<MasonryGridProps> = ({
+  pins,
+  onSaveToggle,
+  className,
+  isSelectMode = false,
+  selectedIds = [],
+  onToggleSelect,
+}) => {
   if (!pins || pins.length === 0) {
     return null;
   }
+
+  const selectedSet = new Set(selectedIds);
 
   return (
     <div
@@ -23,7 +35,14 @@ export const MasonryGrid: React.FC<MasonryGridProps> = ({ pins, onSaveToggle, cl
       }
     >
       {pins.map((pin) => (
-        <PinCard key={pin.hinh_id} pin={pin} onSaveToggle={onSaveToggle} />
+        <PinCard
+          key={pin.hinh_id}
+          pin={pin}
+          onSaveToggle={onSaveToggle}
+          isSelectMode={isSelectMode}
+          isSelected={selectedSet.has(pin.hinh_id)}
+          onToggleSelect={onToggleSelect}
+        />
       ))}
     </div>
   );

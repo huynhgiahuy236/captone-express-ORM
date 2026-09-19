@@ -11,6 +11,7 @@ imageRouter.get("/search", optionalProtect, imageController.searchImages);
 imageRouter.get("/:id", optionalProtect, imageController.getImageDetail);
 
 // Protected routes
+imageRouter.post("/batch-delete", protect, imageController.batchDeleteImages);
 imageRouter.post("/", protect, uploadMemoryStorage.single("file"), imageController.createImage);
 imageRouter.delete("/:id", protect, imageController.deleteImage);
 

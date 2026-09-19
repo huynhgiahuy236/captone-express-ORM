@@ -19,6 +19,8 @@ CREATE TABLE IF NOT EXISTS `nguoi_dung` (
 	`ho_ten` VARCHAR(255),
 	`tuoi` INT,
 	`anh_dai_dien` TEXT,
+	`mo_ta` TEXT NULL,
+	`quyen_rieng_tu` TEXT NULL,
 	`google_id` VARCHAR(255) NULL,
 
 	-- Bộ thuộc tính quản trị mặc định
@@ -135,7 +137,21 @@ CREATE TABLE IF NOT EXISTS `tym_binh_luan` (
 );
 
 -- ======================================================
--- 8. DỮ LIỆU MẪU SINH ĐỘNG (SEED / MOCK DATA)
+-- 8. Tạo Bảng: theo_doi (Follow người dùng / tác giả)
+-- ======================================================
+CREATE TABLE IF NOT EXISTS `theo_doi` (
+	`theo_doi_id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	`nguoi_theo_doi_id` INT NOT NULL,
+	`nguoi_duoc_theo_doi_id` INT NOT NULL,
+	`createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+	UNIQUE KEY `unique_follow` (`nguoi_theo_doi_id`, `nguoi_duoc_theo_doi_id`),
+	FOREIGN KEY (`nguoi_theo_doi_id`) REFERENCES `nguoi_dung`(`nguoi_dung_id`) ON DELETE CASCADE,
+	FOREIGN KEY (`nguoi_duoc_theo_doi_id`) REFERENCES `nguoi_dung`(`nguoi_dung_id`) ON DELETE CASCADE
+);
+
+-- ======================================================
+-- 9. DỮ LIỆU MẪU SINH ĐỘNG (SEED / MOCK DATA)
 -- Mật khẩu mẫu cho tất cả tài khoản bên dưới là: 123456
 -- (Đã băm bằng bcrypt: $2b$10$t.cHgqiftehsWXmiDwCi3OTNHDvnxh.E/WXcL96iKlv.9Rn73dr46)
 -- ======================================================
@@ -155,7 +171,7 @@ INSERT INTO `hinh_anh` (`hinh_id`, `ten_hinh`, `duong_dan`, `mo_ta`, `the_loai`,
 (1, 'Chú chó French Bulldog áo vàng phong cách', 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=800', 'Chú cún thời trang với biểu cảm cực ngầu trong chiếc áo len vàng nổi bật', 'Thú cưng', 1),
 (2, 'Tranh nghệ thuật sơn lỏng trừu tượng đa sắc màu', 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=800', 'Tác phẩm nghệ thuật màu acrylic lỏng loang màu sắc rực rỡ và hiện đại', 'Nghệ thuật', 1),
 (3, 'Nghệ thuật đồ họa 3D Neon Pop Art', 'https://images.unsplash.com/photo-1563089145-599997674d42?w=800', 'Tác phẩm thị giác 3D đa chiều với ánh sáng neon rực rỡ ấn tượng', 'Nghệ thuật', 2),
-(4, 'Quý ông công sở lịch lãm & Doanh nhân', 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800', 'Phong cách thời trang vest nam tối giản và chuyên nghiệp', 'Thời trang', 3),
+(4, 'Siêu xe Nissan GT-R trên cung đường hoàng hôn', 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800', 'Chiến mã thể thao Nissan GT-R dũng mãnh lăn bánh trên cung đường tuyệt đẹp trong ánh hoàng hôn rực rỡ', 'Xe cộ', 3),
 (5, 'Chú cún Corgi cười híp mắt', 'https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?w=800', 'Bức ảnh chân dung cún cưng ngộ nghĩnh đáng yêu cười toe toét', 'Thú cưng', 2),
 (6, 'Chú mèo mắt tròn ngơ ngác đáng yêu', 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800', 'Khoảnh khắc hài hước của chú mèo cưng với đôi mắt to tròn ngơ ngác', 'Thú cưng', 3),
 (7, 'Kẹo dẻo gấu Haribo sắc màu ngọt ngào', 'https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?w=800', 'Những viên kẹo dẻo hình gấu phủ đường đủ màu sắc tươi vui và bắt mắt', 'Ẩm thực', 3),
@@ -170,14 +186,14 @@ INSERT INTO `hinh_anh` (`hinh_id`, `ten_hinh`, `duong_dan`, `mo_ta`, `the_loai`,
 (16, 'Quán Cà phê phong cách Vintage ấm cúng', 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800', 'Không gian quán cafe bình yên với ánh đèn vàng ấm áp và những cuốn sách cổ', 'Ẩm thực', 1),
 (17, 'Bình gốm sứ thủ công phong cách Wabi Sabi', 'https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?w=800', 'Nét đẹp mộc mạc tối giản của đồ gốm trang trí nội thất phong cách Nhật Bản', 'Nghệ thuật', 2),
 (18, 'Chú chó Golden Retriever biểu cảm hài hước', 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=800', 'Khoảnh khắc tinh nghịch liếm mũi siêu đáng yêu của chú chó Golden', 'Thú cưng', 3),
-(19, 'Phố cổ Kyoto và tháp chùa Yasaka huyền ảo', 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800', 'Khung cảnh cổ kính xứ sở hoa anh đào lung linh trong buổi chiều tà rực rỡ', 'Thiên nhiên', 4),
+(19, 'Phố cổ Kyoto và tháp chùa Yasaka huyền ảo', 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800', 'Khung cảnh cổ kính xứ sở hoa anh đào lung linh trong buổi chiều tà rực rỡ', 'Kiến trúc', 4),
 (20, 'Phòng khách phong cách Scandinavian hiện đại', 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800', 'Thiết kế nội thất Bắc Âu tràn ngập ánh sáng tự nhiên với tone gỗ mộc', 'Kiến trúc', 5),
-(21, 'Máy ảnh Film cổ điển & Cuốn sổ hành trình', 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800', 'Những chuyến đi phượt ghi dấu kỷ niệm bằng máy ảnh cơ vintage', 'Thời trang', 6),
+(21, 'Máy ảnh Film cổ điển & Cuốn sổ hành trình', 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800', 'Những chuyến đi phượt ghi dấu kỷ niệm bằng máy ảnh cơ vintage', 'Nghệ thuật', 6),
 (22, 'Ly Matcha Latte nghệ thuật bên máy tính xách tay', 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=800', 'Tách matcha thơm ngon với bọt sữa vẽ hoa tinh tế bên góc bàn làm việc', 'Ẩm thực', 1),
-(23, 'Tay lướt sóng điêu luyện trên đầu ngọn sóng', 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800', 'Khoảnh khắc thể thao mạo hiểm lướt sóng biển xanh Thái Bình Dương', 'Thời trang', 2),
+(23, 'Tay lướt sóng điêu luyện trên đầu ngọn sóng', 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800', 'Khoảnh khắc thể thao mạo hiểm lướt sóng biển xanh Thái Bình Dương', 'Thiên nhiên', 2),
 (24, 'Biệt thự kính Contemporary sang trọng', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800', 'Kiến trúc biệt thự hiện đại kết hợp vách kính tràn viền và hồ bơi ngoài trời', 'Kiến trúc', 3),
 (25, 'Khu rừng nguyên sinh đón tia nắng sớm', 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800', 'Con đường mòn trong rừng ngập tràn sắc vàng của những tia nắng sớm', 'Thiên nhiên', 4),
-(26, 'Siêu xe thể thao Porsche 911 Classic', 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800', 'Huyền thoại xe hơi thể thao phong cách retro đầy uy lực', 'Thời trang', 5),
+(26, 'Siêu xe thể thao Porsche 911 Classic', 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800', 'Huyền thoại xe hơi thể thao phong cách retro đầy uy lực', 'Xe cộ', 5),
 (27, 'Dãy núi tuyết trùng điệp & Bầu trời xanh', 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800', 'Phong cảnh ngoạn mục của những rặng núi phủ tuyết trắng xóa', 'Thiên nhiên', 6),
 (28, 'Nến thơm thư giãn không gian ấm cúng', 'https://images.unsplash.com/photo-1603006905003-be475563bc59?w=800', 'Ánh nến lung linh cùng hương tinh dầu tự nhiên tạo cảm giác thư thái', 'Kiến trúc', 1),
 (29, 'Ghế sofa nhung xanh ngọc bích & Phòng khách tối giản', 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800', 'Thiết kế nội thất phòng khách tinh tế với tone màu xanh emerald quý phái', 'Kiến trúc', 1),

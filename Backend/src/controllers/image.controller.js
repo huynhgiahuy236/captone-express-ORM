@@ -51,4 +51,14 @@ export const imageController = {
       next(err);
     }
   },
+
+  async batchDeleteImages(req, res, next) {
+    try {
+      const result = await imageService.batchDeleteImages(req);
+      const response = responseSuccess(result, result.message);
+      res.status(response.statusCode).json(response);
+    } catch (err) {
+      next(err);
+    }
+  },
 };

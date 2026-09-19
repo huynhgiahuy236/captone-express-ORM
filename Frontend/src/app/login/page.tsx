@@ -6,25 +6,16 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useTheme } from "@/lib/theme-context";
 import {
-  X,
   Lock,
   Mail,
   User as UserIcon,
-  Calendar,
   AlertCircle,
   ArrowLeft,
-  Sparkles,
-  Compass,
-  Image as ImageIcon,
-  Key,
-  ShieldCheck,
-  CheckCircle2,
   Loader2,
   Sun,
   Moon,
 } from "lucide-react";
 import { HukiLogo } from "@/components/HukiLogo";
-import { LayeredOceanWaves } from "@/components/LayeredOceanWaves";
 import { DateOfBirthSelect } from "@/components/DateOfBirthSelect";
 import {
   validateFullName,
@@ -250,11 +241,6 @@ function AuthPageContent() {
             )}
           </button>
 
-          <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white text-xs font-semibold shadow-xs">
-            <ShieldCheck size={15} className="text-cyan-300" />
-            <span>Single Sign-On</span>
-          </div>
-
           <Link
             href="/"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/20 text-white text-xs font-bold transition duration-200 group shadow-xs cursor-pointer"
@@ -267,14 +253,9 @@ function AuthPageContent() {
 
       {/* Main Content Area */}
       <div className="relative z-20 w-full max-w-7xl mx-auto my-auto py-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        
+
         {/* Left Headline Area */}
         <div className="hidden lg:flex lg:col-span-6 flex-col justify-center space-y-4 text-white pl-2 pr-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-cyan-200 text-xs font-semibold w-fit shadow-xs">
-            <Sparkles size={14} className="text-cyan-300" />
-            <span>Khơi nguồn cảm hứng mỗi ngày</span>
-          </div>
-
           <h1 className="text-3xl sm:text-4xl xl:text-5xl font-black tracking-tight leading-tight text-white drop-shadow-md">
             Khám phá ý tưởng <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-cyan-300 to-sky-200">
@@ -290,47 +271,17 @@ function AuthPageContent() {
         {/* Right Form Card */}
         <div className="lg:col-span-6 flex justify-center lg:justify-end w-full">
           <div className="w-full max-w-md bg-white/95 dark:bg-[#181C31]/95 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/60 dark:border-[#2d2f40]/80 transition-all">
-            
-            {/* Header */}
+
+            {/* Header Title */}
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-900 text-[#0052cc] dark:text-blue-300 text-xs font-bold shadow-2xs mb-3">
-                <Sparkles size={13} className="text-blue-500" />
-                <span>{mode === "login" ? "Chào mừng trở lại" : "Khám phá không gian sáng tạo"}</span>
-              </div>
               <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-gray-900 dark:text-white">
                 {mode === "login" ? "Đăng nhập" : "Tạo tài khoản"}
               </h2>
-              <p className="mt-1 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+              <p className="mt-1.5 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                 {mode === "login"
                   ? "Nhập thông tin để tiếp tục trải nghiệm HUKI."
                   : "Bắt đầu hành trình lưu giữ và chia sẻ ý tưởng của bạn."}
               </p>
-
-              {/* Mode Switcher Tabs */}
-              <div className="inline-flex mt-4 p-1 rounded-full bg-gray-100 dark:bg-[#252A42] border border-gray-200/70 dark:border-[#2d2f40]">
-                <button
-                  type="button"
-                  onClick={() => switchMode("login")}
-                  className={`px-5 sm:px-6 py-1.5 rounded-full text-xs font-bold transition duration-200 cursor-pointer ${
-                    mode === "login"
-                      ? "bg-[#0052cc] text-white shadow-xs"
-                      : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-                  }`}
-                >
-                  Đăng nhập
-                </button>
-                <button
-                  type="button"
-                  onClick={() => switchMode("signup")}
-                  className={`px-5 sm:px-6 py-1.5 rounded-full text-xs font-bold transition duration-200 cursor-pointer ${
-                    mode === "signup"
-                      ? "bg-[#0052cc] text-white shadow-xs"
-                      : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-                  }`}
-                >
-                  Đăng ký
-                </button>
-              </div>
             </div>
 
             {/* Error General Banner */}
@@ -342,7 +293,7 @@ function AuthPageContent() {
             )}
 
             {/* Form */}
-            <form onSubmit={handleSubmit} noValidate className="mt-4 space-y-3">
+            <form onSubmit={handleSubmit} noValidate className="mt-5 space-y-3">
               {mode === "signup" && (
                 <>
                   {/* Full Name */}
@@ -446,23 +397,8 @@ function AuthPageContent() {
               </button>
             </form>
 
-            {/* Switch Action */}
-            <div className="mt-3 text-center">
-              <button
-                type="button"
-                onClick={() => switchMode(mode === "login" ? "signup" : "login")}
-                className="text-xs text-gray-500 dark:text-gray-400 hover:text-[#0052cc] dark:hover:text-blue-400 font-medium transition cursor-pointer"
-              >
-                {mode === "login" ? (
-                  <>Chưa có tài khoản? <span className="text-[#0052cc] dark:text-blue-400 font-bold underline">Đăng ký ngay</span></>
-                ) : (
-                  <>Đã có tài khoản? <span className="text-[#0052cc] dark:text-blue-400 font-bold underline">Đăng nhập ngay</span></>
-                )}
-              </button>
-            </div>
-
             {/* Divider */}
-            <div className="relative my-3 text-center">
+            <div className="relative my-4 text-center">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-[#2d2f40]" />
               </div>
@@ -497,6 +433,31 @@ function AuthPageContent() {
               </svg>
               <span>Tiếp tục với Google</span>
             </button>
+
+            {/* Bottom Switch Link */}
+            <div className="mt-5 text-center">
+              <button
+                type="button"
+                onClick={() => switchMode(mode === "login" ? "signup" : "login")}
+                className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition cursor-pointer"
+              >
+                {mode === "login" ? (
+                  <>
+                    Chưa có tài khoản?{" "}
+                    <span className="text-[#0052cc] dark:text-blue-400 font-bold hover:underline">
+                      Đăng ký ngay
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    Đã có tài khoản?{" "}
+                    <span className="text-[#0052cc] dark:text-blue-400 font-bold hover:underline">
+                      Đăng nhập ngay
+                    </span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
 

@@ -17,6 +17,7 @@ model nguoi_dung {
   anh_dai_dien      String?      @db.Text
   mo_ta             String?      @db.Text
   google_id         String?      @db.VarChar(255)
+  quyen_rieng_tu    String?      @db.Text
   deletedBy         Int          @default(0)
   isDeleted         Boolean      @default(false)
   deletedAt         DateTime?    @db.Timestamp(0)
@@ -29,6 +30,8 @@ model nguoi_dung {
   tym_binh_luan     tym_binh_luan[]
   thong_bao_gui     thong_bao[]  @relation("ThongBaoNguoiGui")
   thong_bao_nhan    thong_bao[]  @relation("ThongBaoNguoiNhan")
+  nguoi_theo_doi    theo_doi[]   @relation("NguoiTheoDoi")
+  nguoi_duoc_theo_doi theo_doi[] @relation("NguoiDuocTheoDoi")
 }
 
 model hinh_anh {
@@ -137,4 +140,18 @@ model thong_bao {
   @@index([nguoi_nhan_id], map: "nguoi_nhan_id")
   @@index([nguoi_gui_id], map: "nguoi_gui_id")
   @@index([hinh_id], map: "hinh_id")
+}
+
+model theo_doi {
+  theo_doi_id             Int        @id @default(autoincrement())
+  nguoi_theo_doi_id       Int
+  nguoi_duoc_theo_doi_id  Int
+  createdAt               DateTime   @default(now()) @db.Timestamp(0)
+
+  nguoi_theo_doi          nguoi_dung @relation("NguoiTheoDoi", fields: [nguoi_theo_doi_id], references: [nguoi_dung_id], onDelete: Cascade, onUpdate: NoAction)
+  nguoi_duoc_theo_doi     nguoi_dung @relation("NguoiDuocTheoDoi", fields: [nguoi_duoc_theo_doi_id], references: [nguoi_dung_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([nguoi_theo_doi_id, nguoi_duoc_theo_doi_id], map: "unique_follow")
+  @@index([nguoi_duoc_theo_doi_id], map: "nguoi_duoc_theo_doi_id")
+  @@index([nguoi_theo_doi_id], map: "nguoi_theo_doi_id")
 }

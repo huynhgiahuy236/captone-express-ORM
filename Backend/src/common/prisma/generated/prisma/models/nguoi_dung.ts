@@ -47,6 +47,7 @@ export type Nguoi_dungMinAggregateOutputType = {
   anh_dai_dien: string | null
   mo_ta: string | null
   google_id: string | null
+  quyen_rieng_tu: string | null
   deletedBy: number | null
   isDeleted: boolean | null
   deletedAt: Date | null
@@ -63,6 +64,7 @@ export type Nguoi_dungMaxAggregateOutputType = {
   anh_dai_dien: string | null
   mo_ta: string | null
   google_id: string | null
+  quyen_rieng_tu: string | null
   deletedBy: number | null
   isDeleted: boolean | null
   deletedAt: Date | null
@@ -79,6 +81,7 @@ export type Nguoi_dungCountAggregateOutputType = {
   anh_dai_dien: number
   mo_ta: number
   google_id: number
+  quyen_rieng_tu: number
   deletedBy: number
   isDeleted: number
   deletedAt: number
@@ -109,6 +112,7 @@ export type Nguoi_dungMinAggregateInputType = {
   anh_dai_dien?: true
   mo_ta?: true
   google_id?: true
+  quyen_rieng_tu?: true
   deletedBy?: true
   isDeleted?: true
   deletedAt?: true
@@ -125,6 +129,7 @@ export type Nguoi_dungMaxAggregateInputType = {
   anh_dai_dien?: true
   mo_ta?: true
   google_id?: true
+  quyen_rieng_tu?: true
   deletedBy?: true
   isDeleted?: true
   deletedAt?: true
@@ -141,6 +146,7 @@ export type Nguoi_dungCountAggregateInputType = {
   anh_dai_dien?: true
   mo_ta?: true
   google_id?: true
+  quyen_rieng_tu?: true
   deletedBy?: true
   isDeleted?: true
   deletedAt?: true
@@ -244,6 +250,7 @@ export type Nguoi_dungGroupByOutputType = {
   anh_dai_dien: string | null
   mo_ta: string | null
   google_id: string | null
+  quyen_rieng_tu: string | null
   deletedBy: number
   isDeleted: boolean
   deletedAt: Date | null
@@ -283,6 +290,7 @@ export type nguoi_dungWhereInput = {
   anh_dai_dien?: Prisma.StringNullableFilter<"nguoi_dung"> | string | null
   mo_ta?: Prisma.StringNullableFilter<"nguoi_dung"> | string | null
   google_id?: Prisma.StringNullableFilter<"nguoi_dung"> | string | null
+  quyen_rieng_tu?: Prisma.StringNullableFilter<"nguoi_dung"> | string | null
   deletedBy?: Prisma.IntFilter<"nguoi_dung"> | number
   isDeleted?: Prisma.BoolFilter<"nguoi_dung"> | boolean
   deletedAt?: Prisma.DateTimeNullableFilter<"nguoi_dung"> | Date | string | null
@@ -295,6 +303,8 @@ export type nguoi_dungWhereInput = {
   tym_binh_luan?: Prisma.Tym_binh_luanListRelationFilter
   thong_bao_gui?: Prisma.Thong_baoListRelationFilter
   thong_bao_nhan?: Prisma.Thong_baoListRelationFilter
+  nguoi_theo_doi?: Prisma.Theo_doiListRelationFilter
+  nguoi_duoc_theo_doi?: Prisma.Theo_doiListRelationFilter
 }
 
 export type nguoi_dungOrderByWithRelationInput = {
@@ -306,6 +316,7 @@ export type nguoi_dungOrderByWithRelationInput = {
   anh_dai_dien?: Prisma.SortOrderInput | Prisma.SortOrder
   mo_ta?: Prisma.SortOrderInput | Prisma.SortOrder
   google_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  quyen_rieng_tu?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedBy?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -318,6 +329,8 @@ export type nguoi_dungOrderByWithRelationInput = {
   tym_binh_luan?: Prisma.tym_binh_luanOrderByRelationAggregateInput
   thong_bao_gui?: Prisma.thong_baoOrderByRelationAggregateInput
   thong_bao_nhan?: Prisma.thong_baoOrderByRelationAggregateInput
+  nguoi_theo_doi?: Prisma.theo_doiOrderByRelationAggregateInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiOrderByRelationAggregateInput
   _relevance?: Prisma.nguoi_dungOrderByRelevanceInput
 }
 
@@ -333,6 +346,7 @@ export type nguoi_dungWhereUniqueInput = Prisma.AtLeast<{
   anh_dai_dien?: Prisma.StringNullableFilter<"nguoi_dung"> | string | null
   mo_ta?: Prisma.StringNullableFilter<"nguoi_dung"> | string | null
   google_id?: Prisma.StringNullableFilter<"nguoi_dung"> | string | null
+  quyen_rieng_tu?: Prisma.StringNullableFilter<"nguoi_dung"> | string | null
   deletedBy?: Prisma.IntFilter<"nguoi_dung"> | number
   isDeleted?: Prisma.BoolFilter<"nguoi_dung"> | boolean
   deletedAt?: Prisma.DateTimeNullableFilter<"nguoi_dung"> | Date | string | null
@@ -345,6 +359,8 @@ export type nguoi_dungWhereUniqueInput = Prisma.AtLeast<{
   tym_binh_luan?: Prisma.Tym_binh_luanListRelationFilter
   thong_bao_gui?: Prisma.Thong_baoListRelationFilter
   thong_bao_nhan?: Prisma.Thong_baoListRelationFilter
+  nguoi_theo_doi?: Prisma.Theo_doiListRelationFilter
+  nguoi_duoc_theo_doi?: Prisma.Theo_doiListRelationFilter
 }, "nguoi_dung_id" | "email">
 
 export type nguoi_dungOrderByWithAggregationInput = {
@@ -356,6 +372,7 @@ export type nguoi_dungOrderByWithAggregationInput = {
   anh_dai_dien?: Prisma.SortOrderInput | Prisma.SortOrder
   mo_ta?: Prisma.SortOrderInput | Prisma.SortOrder
   google_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  quyen_rieng_tu?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedBy?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -380,6 +397,7 @@ export type nguoi_dungScalarWhereWithAggregatesInput = {
   anh_dai_dien?: Prisma.StringNullableWithAggregatesFilter<"nguoi_dung"> | string | null
   mo_ta?: Prisma.StringNullableWithAggregatesFilter<"nguoi_dung"> | string | null
   google_id?: Prisma.StringNullableWithAggregatesFilter<"nguoi_dung"> | string | null
+  quyen_rieng_tu?: Prisma.StringNullableWithAggregatesFilter<"nguoi_dung"> | string | null
   deletedBy?: Prisma.IntWithAggregatesFilter<"nguoi_dung"> | number
   isDeleted?: Prisma.BoolWithAggregatesFilter<"nguoi_dung"> | boolean
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"nguoi_dung"> | Date | string | null
@@ -395,6 +413,7 @@ export type nguoi_dungCreateInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -407,6 +426,8 @@ export type nguoi_dungCreateInput = {
   tym_binh_luan?: Prisma.tym_binh_luanCreateNestedManyWithoutNguoi_dungInput
   thong_bao_gui?: Prisma.thong_baoCreateNestedManyWithoutNguoi_guiInput
   thong_bao_nhan?: Prisma.thong_baoCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_theo_doiInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_duoc_theo_doiInput
 }
 
 export type nguoi_dungUncheckedCreateInput = {
@@ -418,6 +439,7 @@ export type nguoi_dungUncheckedCreateInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -430,6 +452,8 @@ export type nguoi_dungUncheckedCreateInput = {
   tym_binh_luan?: Prisma.tym_binh_luanUncheckedCreateNestedManyWithoutNguoi_dungInput
   thong_bao_gui?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_guiInput
   thong_bao_nhan?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_theo_doiInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_duoc_theo_doiInput
 }
 
 export type nguoi_dungUpdateInput = {
@@ -440,6 +464,7 @@ export type nguoi_dungUpdateInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -452,6 +477,8 @@ export type nguoi_dungUpdateInput = {
   tym_binh_luan?: Prisma.tym_binh_luanUpdateManyWithoutNguoi_dungNestedInput
   thong_bao_gui?: Prisma.thong_baoUpdateManyWithoutNguoi_guiNestedInput
   thong_bao_nhan?: Prisma.thong_baoUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_theo_doiNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
 }
 
 export type nguoi_dungUncheckedUpdateInput = {
@@ -463,6 +490,7 @@ export type nguoi_dungUncheckedUpdateInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -475,6 +503,8 @@ export type nguoi_dungUncheckedUpdateInput = {
   tym_binh_luan?: Prisma.tym_binh_luanUncheckedUpdateManyWithoutNguoi_dungNestedInput
   thong_bao_gui?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_guiNestedInput
   thong_bao_nhan?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_theo_doiNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
 }
 
 export type nguoi_dungCreateManyInput = {
@@ -486,6 +516,7 @@ export type nguoi_dungCreateManyInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -501,6 +532,7 @@ export type nguoi_dungUpdateManyMutationInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -517,6 +549,7 @@ export type nguoi_dungUncheckedUpdateManyInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -539,6 +572,7 @@ export type nguoi_dungCountOrderByAggregateInput = {
   anh_dai_dien?: Prisma.SortOrder
   mo_ta?: Prisma.SortOrder
   google_id?: Prisma.SortOrder
+  quyen_rieng_tu?: Prisma.SortOrder
   deletedBy?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -561,6 +595,7 @@ export type nguoi_dungMaxOrderByAggregateInput = {
   anh_dai_dien?: Prisma.SortOrder
   mo_ta?: Prisma.SortOrder
   google_id?: Prisma.SortOrder
+  quyen_rieng_tu?: Prisma.SortOrder
   deletedBy?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -577,6 +612,7 @@ export type nguoi_dungMinOrderByAggregateInput = {
   anh_dai_dien?: Prisma.SortOrder
   mo_ta?: Prisma.SortOrder
   google_id?: Prisma.SortOrder
+  quyen_rieng_tu?: Prisma.SortOrder
   deletedBy?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -729,6 +765,34 @@ export type nguoi_dungUpdateOneRequiredWithoutThong_bao_nhanNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.nguoi_dungUpdateToOneWithWhereWithoutThong_bao_nhanInput, Prisma.nguoi_dungUpdateWithoutThong_bao_nhanInput>, Prisma.nguoi_dungUncheckedUpdateWithoutThong_bao_nhanInput>
 }
 
+export type nguoi_dungCreateNestedOneWithoutNguoi_theo_doiInput = {
+  create?: Prisma.XOR<Prisma.nguoi_dungCreateWithoutNguoi_theo_doiInput, Prisma.nguoi_dungUncheckedCreateWithoutNguoi_theo_doiInput>
+  connectOrCreate?: Prisma.nguoi_dungCreateOrConnectWithoutNguoi_theo_doiInput
+  connect?: Prisma.nguoi_dungWhereUniqueInput
+}
+
+export type nguoi_dungCreateNestedOneWithoutNguoi_duoc_theo_doiInput = {
+  create?: Prisma.XOR<Prisma.nguoi_dungCreateWithoutNguoi_duoc_theo_doiInput, Prisma.nguoi_dungUncheckedCreateWithoutNguoi_duoc_theo_doiInput>
+  connectOrCreate?: Prisma.nguoi_dungCreateOrConnectWithoutNguoi_duoc_theo_doiInput
+  connect?: Prisma.nguoi_dungWhereUniqueInput
+}
+
+export type nguoi_dungUpdateOneRequiredWithoutNguoi_theo_doiNestedInput = {
+  create?: Prisma.XOR<Prisma.nguoi_dungCreateWithoutNguoi_theo_doiInput, Prisma.nguoi_dungUncheckedCreateWithoutNguoi_theo_doiInput>
+  connectOrCreate?: Prisma.nguoi_dungCreateOrConnectWithoutNguoi_theo_doiInput
+  upsert?: Prisma.nguoi_dungUpsertWithoutNguoi_theo_doiInput
+  connect?: Prisma.nguoi_dungWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.nguoi_dungUpdateToOneWithWhereWithoutNguoi_theo_doiInput, Prisma.nguoi_dungUpdateWithoutNguoi_theo_doiInput>, Prisma.nguoi_dungUncheckedUpdateWithoutNguoi_theo_doiInput>
+}
+
+export type nguoi_dungUpdateOneRequiredWithoutNguoi_duoc_theo_doiNestedInput = {
+  create?: Prisma.XOR<Prisma.nguoi_dungCreateWithoutNguoi_duoc_theo_doiInput, Prisma.nguoi_dungUncheckedCreateWithoutNguoi_duoc_theo_doiInput>
+  connectOrCreate?: Prisma.nguoi_dungCreateOrConnectWithoutNguoi_duoc_theo_doiInput
+  upsert?: Prisma.nguoi_dungUpsertWithoutNguoi_duoc_theo_doiInput
+  connect?: Prisma.nguoi_dungWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.nguoi_dungUpdateToOneWithWhereWithoutNguoi_duoc_theo_doiInput, Prisma.nguoi_dungUpdateWithoutNguoi_duoc_theo_doiInput>, Prisma.nguoi_dungUncheckedUpdateWithoutNguoi_duoc_theo_doiInput>
+}
+
 export type nguoi_dungCreateWithoutHinh_anhInput = {
   email: string
   mat_khau?: string | null
@@ -737,6 +801,7 @@ export type nguoi_dungCreateWithoutHinh_anhInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -748,6 +813,8 @@ export type nguoi_dungCreateWithoutHinh_anhInput = {
   tym_binh_luan?: Prisma.tym_binh_luanCreateNestedManyWithoutNguoi_dungInput
   thong_bao_gui?: Prisma.thong_baoCreateNestedManyWithoutNguoi_guiInput
   thong_bao_nhan?: Prisma.thong_baoCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_theo_doiInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_duoc_theo_doiInput
 }
 
 export type nguoi_dungUncheckedCreateWithoutHinh_anhInput = {
@@ -759,6 +826,7 @@ export type nguoi_dungUncheckedCreateWithoutHinh_anhInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -770,6 +838,8 @@ export type nguoi_dungUncheckedCreateWithoutHinh_anhInput = {
   tym_binh_luan?: Prisma.tym_binh_luanUncheckedCreateNestedManyWithoutNguoi_dungInput
   thong_bao_gui?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_guiInput
   thong_bao_nhan?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_theo_doiInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_duoc_theo_doiInput
 }
 
 export type nguoi_dungCreateOrConnectWithoutHinh_anhInput = {
@@ -796,6 +866,7 @@ export type nguoi_dungUpdateWithoutHinh_anhInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -807,6 +878,8 @@ export type nguoi_dungUpdateWithoutHinh_anhInput = {
   tym_binh_luan?: Prisma.tym_binh_luanUpdateManyWithoutNguoi_dungNestedInput
   thong_bao_gui?: Prisma.thong_baoUpdateManyWithoutNguoi_guiNestedInput
   thong_bao_nhan?: Prisma.thong_baoUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_theo_doiNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
 }
 
 export type nguoi_dungUncheckedUpdateWithoutHinh_anhInput = {
@@ -818,6 +891,7 @@ export type nguoi_dungUncheckedUpdateWithoutHinh_anhInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -829,6 +903,8 @@ export type nguoi_dungUncheckedUpdateWithoutHinh_anhInput = {
   tym_binh_luan?: Prisma.tym_binh_luanUncheckedUpdateManyWithoutNguoi_dungNestedInput
   thong_bao_gui?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_guiNestedInput
   thong_bao_nhan?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_theo_doiNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
 }
 
 export type nguoi_dungCreateWithoutBinh_luanInput = {
@@ -839,6 +915,7 @@ export type nguoi_dungCreateWithoutBinh_luanInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -850,6 +927,8 @@ export type nguoi_dungCreateWithoutBinh_luanInput = {
   tym_binh_luan?: Prisma.tym_binh_luanCreateNestedManyWithoutNguoi_dungInput
   thong_bao_gui?: Prisma.thong_baoCreateNestedManyWithoutNguoi_guiInput
   thong_bao_nhan?: Prisma.thong_baoCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_theo_doiInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_duoc_theo_doiInput
 }
 
 export type nguoi_dungUncheckedCreateWithoutBinh_luanInput = {
@@ -861,6 +940,7 @@ export type nguoi_dungUncheckedCreateWithoutBinh_luanInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -872,6 +952,8 @@ export type nguoi_dungUncheckedCreateWithoutBinh_luanInput = {
   tym_binh_luan?: Prisma.tym_binh_luanUncheckedCreateNestedManyWithoutNguoi_dungInput
   thong_bao_gui?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_guiInput
   thong_bao_nhan?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_theo_doiInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_duoc_theo_doiInput
 }
 
 export type nguoi_dungCreateOrConnectWithoutBinh_luanInput = {
@@ -898,6 +980,7 @@ export type nguoi_dungUpdateWithoutBinh_luanInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -909,6 +992,8 @@ export type nguoi_dungUpdateWithoutBinh_luanInput = {
   tym_binh_luan?: Prisma.tym_binh_luanUpdateManyWithoutNguoi_dungNestedInput
   thong_bao_gui?: Prisma.thong_baoUpdateManyWithoutNguoi_guiNestedInput
   thong_bao_nhan?: Prisma.thong_baoUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_theo_doiNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
 }
 
 export type nguoi_dungUncheckedUpdateWithoutBinh_luanInput = {
@@ -920,6 +1005,7 @@ export type nguoi_dungUncheckedUpdateWithoutBinh_luanInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -931,6 +1017,8 @@ export type nguoi_dungUncheckedUpdateWithoutBinh_luanInput = {
   tym_binh_luan?: Prisma.tym_binh_luanUncheckedUpdateManyWithoutNguoi_dungNestedInput
   thong_bao_gui?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_guiNestedInput
   thong_bao_nhan?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_theo_doiNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
 }
 
 export type nguoi_dungCreateWithoutLuu_anhInput = {
@@ -941,6 +1029,7 @@ export type nguoi_dungCreateWithoutLuu_anhInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -952,6 +1041,8 @@ export type nguoi_dungCreateWithoutLuu_anhInput = {
   tym_binh_luan?: Prisma.tym_binh_luanCreateNestedManyWithoutNguoi_dungInput
   thong_bao_gui?: Prisma.thong_baoCreateNestedManyWithoutNguoi_guiInput
   thong_bao_nhan?: Prisma.thong_baoCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_theo_doiInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_duoc_theo_doiInput
 }
 
 export type nguoi_dungUncheckedCreateWithoutLuu_anhInput = {
@@ -963,6 +1054,7 @@ export type nguoi_dungUncheckedCreateWithoutLuu_anhInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -974,6 +1066,8 @@ export type nguoi_dungUncheckedCreateWithoutLuu_anhInput = {
   tym_binh_luan?: Prisma.tym_binh_luanUncheckedCreateNestedManyWithoutNguoi_dungInput
   thong_bao_gui?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_guiInput
   thong_bao_nhan?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_theo_doiInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_duoc_theo_doiInput
 }
 
 export type nguoi_dungCreateOrConnectWithoutLuu_anhInput = {
@@ -1000,6 +1094,7 @@ export type nguoi_dungUpdateWithoutLuu_anhInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1011,6 +1106,8 @@ export type nguoi_dungUpdateWithoutLuu_anhInput = {
   tym_binh_luan?: Prisma.tym_binh_luanUpdateManyWithoutNguoi_dungNestedInput
   thong_bao_gui?: Prisma.thong_baoUpdateManyWithoutNguoi_guiNestedInput
   thong_bao_nhan?: Prisma.thong_baoUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_theo_doiNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
 }
 
 export type nguoi_dungUncheckedUpdateWithoutLuu_anhInput = {
@@ -1022,6 +1119,7 @@ export type nguoi_dungUncheckedUpdateWithoutLuu_anhInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1033,6 +1131,8 @@ export type nguoi_dungUncheckedUpdateWithoutLuu_anhInput = {
   tym_binh_luan?: Prisma.tym_binh_luanUncheckedUpdateManyWithoutNguoi_dungNestedInput
   thong_bao_gui?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_guiNestedInput
   thong_bao_nhan?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_theo_doiNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
 }
 
 export type nguoi_dungCreateWithoutTym_anhInput = {
@@ -1043,6 +1143,7 @@ export type nguoi_dungCreateWithoutTym_anhInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -1054,6 +1155,8 @@ export type nguoi_dungCreateWithoutTym_anhInput = {
   tym_binh_luan?: Prisma.tym_binh_luanCreateNestedManyWithoutNguoi_dungInput
   thong_bao_gui?: Prisma.thong_baoCreateNestedManyWithoutNguoi_guiInput
   thong_bao_nhan?: Prisma.thong_baoCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_theo_doiInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_duoc_theo_doiInput
 }
 
 export type nguoi_dungUncheckedCreateWithoutTym_anhInput = {
@@ -1065,6 +1168,7 @@ export type nguoi_dungUncheckedCreateWithoutTym_anhInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -1076,6 +1180,8 @@ export type nguoi_dungUncheckedCreateWithoutTym_anhInput = {
   tym_binh_luan?: Prisma.tym_binh_luanUncheckedCreateNestedManyWithoutNguoi_dungInput
   thong_bao_gui?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_guiInput
   thong_bao_nhan?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_theo_doiInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_duoc_theo_doiInput
 }
 
 export type nguoi_dungCreateOrConnectWithoutTym_anhInput = {
@@ -1102,6 +1208,7 @@ export type nguoi_dungUpdateWithoutTym_anhInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1113,6 +1220,8 @@ export type nguoi_dungUpdateWithoutTym_anhInput = {
   tym_binh_luan?: Prisma.tym_binh_luanUpdateManyWithoutNguoi_dungNestedInput
   thong_bao_gui?: Prisma.thong_baoUpdateManyWithoutNguoi_guiNestedInput
   thong_bao_nhan?: Prisma.thong_baoUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_theo_doiNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
 }
 
 export type nguoi_dungUncheckedUpdateWithoutTym_anhInput = {
@@ -1124,6 +1233,7 @@ export type nguoi_dungUncheckedUpdateWithoutTym_anhInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1135,6 +1245,8 @@ export type nguoi_dungUncheckedUpdateWithoutTym_anhInput = {
   tym_binh_luan?: Prisma.tym_binh_luanUncheckedUpdateManyWithoutNguoi_dungNestedInput
   thong_bao_gui?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_guiNestedInput
   thong_bao_nhan?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_theo_doiNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
 }
 
 export type nguoi_dungCreateWithoutTym_binh_luanInput = {
@@ -1145,6 +1257,7 @@ export type nguoi_dungCreateWithoutTym_binh_luanInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -1156,6 +1269,8 @@ export type nguoi_dungCreateWithoutTym_binh_luanInput = {
   tym_anh?: Prisma.tym_anhCreateNestedManyWithoutNguoi_dungInput
   thong_bao_gui?: Prisma.thong_baoCreateNestedManyWithoutNguoi_guiInput
   thong_bao_nhan?: Prisma.thong_baoCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_theo_doiInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_duoc_theo_doiInput
 }
 
 export type nguoi_dungUncheckedCreateWithoutTym_binh_luanInput = {
@@ -1167,6 +1282,7 @@ export type nguoi_dungUncheckedCreateWithoutTym_binh_luanInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -1178,6 +1294,8 @@ export type nguoi_dungUncheckedCreateWithoutTym_binh_luanInput = {
   tym_anh?: Prisma.tym_anhUncheckedCreateNestedManyWithoutNguoi_dungInput
   thong_bao_gui?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_guiInput
   thong_bao_nhan?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_theo_doiInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_duoc_theo_doiInput
 }
 
 export type nguoi_dungCreateOrConnectWithoutTym_binh_luanInput = {
@@ -1204,6 +1322,7 @@ export type nguoi_dungUpdateWithoutTym_binh_luanInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1215,6 +1334,8 @@ export type nguoi_dungUpdateWithoutTym_binh_luanInput = {
   tym_anh?: Prisma.tym_anhUpdateManyWithoutNguoi_dungNestedInput
   thong_bao_gui?: Prisma.thong_baoUpdateManyWithoutNguoi_guiNestedInput
   thong_bao_nhan?: Prisma.thong_baoUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_theo_doiNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
 }
 
 export type nguoi_dungUncheckedUpdateWithoutTym_binh_luanInput = {
@@ -1226,6 +1347,7 @@ export type nguoi_dungUncheckedUpdateWithoutTym_binh_luanInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1237,6 +1359,8 @@ export type nguoi_dungUncheckedUpdateWithoutTym_binh_luanInput = {
   tym_anh?: Prisma.tym_anhUncheckedUpdateManyWithoutNguoi_dungNestedInput
   thong_bao_gui?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_guiNestedInput
   thong_bao_nhan?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_theo_doiNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
 }
 
 export type nguoi_dungCreateWithoutThong_bao_guiInput = {
@@ -1247,6 +1371,7 @@ export type nguoi_dungCreateWithoutThong_bao_guiInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -1258,6 +1383,8 @@ export type nguoi_dungCreateWithoutThong_bao_guiInput = {
   tym_anh?: Prisma.tym_anhCreateNestedManyWithoutNguoi_dungInput
   tym_binh_luan?: Prisma.tym_binh_luanCreateNestedManyWithoutNguoi_dungInput
   thong_bao_nhan?: Prisma.thong_baoCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_theo_doiInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_duoc_theo_doiInput
 }
 
 export type nguoi_dungUncheckedCreateWithoutThong_bao_guiInput = {
@@ -1269,6 +1396,7 @@ export type nguoi_dungUncheckedCreateWithoutThong_bao_guiInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -1280,6 +1408,8 @@ export type nguoi_dungUncheckedCreateWithoutThong_bao_guiInput = {
   tym_anh?: Prisma.tym_anhUncheckedCreateNestedManyWithoutNguoi_dungInput
   tym_binh_luan?: Prisma.tym_binh_luanUncheckedCreateNestedManyWithoutNguoi_dungInput
   thong_bao_nhan?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_theo_doiInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_duoc_theo_doiInput
 }
 
 export type nguoi_dungCreateOrConnectWithoutThong_bao_guiInput = {
@@ -1295,6 +1425,7 @@ export type nguoi_dungCreateWithoutThong_bao_nhanInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -1306,6 +1437,8 @@ export type nguoi_dungCreateWithoutThong_bao_nhanInput = {
   tym_anh?: Prisma.tym_anhCreateNestedManyWithoutNguoi_dungInput
   tym_binh_luan?: Prisma.tym_binh_luanCreateNestedManyWithoutNguoi_dungInput
   thong_bao_gui?: Prisma.thong_baoCreateNestedManyWithoutNguoi_guiInput
+  nguoi_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_theo_doiInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_duoc_theo_doiInput
 }
 
 export type nguoi_dungUncheckedCreateWithoutThong_bao_nhanInput = {
@@ -1317,6 +1450,7 @@ export type nguoi_dungUncheckedCreateWithoutThong_bao_nhanInput = {
   anh_dai_dien?: string | null
   mo_ta?: string | null
   google_id?: string | null
+  quyen_rieng_tu?: string | null
   deletedBy?: number
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -1328,6 +1462,8 @@ export type nguoi_dungUncheckedCreateWithoutThong_bao_nhanInput = {
   tym_anh?: Prisma.tym_anhUncheckedCreateNestedManyWithoutNguoi_dungInput
   tym_binh_luan?: Prisma.tym_binh_luanUncheckedCreateNestedManyWithoutNguoi_dungInput
   thong_bao_gui?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_guiInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_theo_doiInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_duoc_theo_doiInput
 }
 
 export type nguoi_dungCreateOrConnectWithoutThong_bao_nhanInput = {
@@ -1354,6 +1490,7 @@ export type nguoi_dungUpdateWithoutThong_bao_guiInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1365,6 +1502,8 @@ export type nguoi_dungUpdateWithoutThong_bao_guiInput = {
   tym_anh?: Prisma.tym_anhUpdateManyWithoutNguoi_dungNestedInput
   tym_binh_luan?: Prisma.tym_binh_luanUpdateManyWithoutNguoi_dungNestedInput
   thong_bao_nhan?: Prisma.thong_baoUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_theo_doiNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
 }
 
 export type nguoi_dungUncheckedUpdateWithoutThong_bao_guiInput = {
@@ -1376,6 +1515,7 @@ export type nguoi_dungUncheckedUpdateWithoutThong_bao_guiInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1387,6 +1527,8 @@ export type nguoi_dungUncheckedUpdateWithoutThong_bao_guiInput = {
   tym_anh?: Prisma.tym_anhUncheckedUpdateManyWithoutNguoi_dungNestedInput
   tym_binh_luan?: Prisma.tym_binh_luanUncheckedUpdateManyWithoutNguoi_dungNestedInput
   thong_bao_nhan?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_theo_doiNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
 }
 
 export type nguoi_dungUpsertWithoutThong_bao_nhanInput = {
@@ -1408,6 +1550,7 @@ export type nguoi_dungUpdateWithoutThong_bao_nhanInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1419,6 +1562,8 @@ export type nguoi_dungUpdateWithoutThong_bao_nhanInput = {
   tym_anh?: Prisma.tym_anhUpdateManyWithoutNguoi_dungNestedInput
   tym_binh_luan?: Prisma.tym_binh_luanUpdateManyWithoutNguoi_dungNestedInput
   thong_bao_gui?: Prisma.thong_baoUpdateManyWithoutNguoi_guiNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_theo_doiNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
 }
 
 export type nguoi_dungUncheckedUpdateWithoutThong_bao_nhanInput = {
@@ -1430,6 +1575,7 @@ export type nguoi_dungUncheckedUpdateWithoutThong_bao_nhanInput = {
   anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1441,6 +1587,236 @@ export type nguoi_dungUncheckedUpdateWithoutThong_bao_nhanInput = {
   tym_anh?: Prisma.tym_anhUncheckedUpdateManyWithoutNguoi_dungNestedInput
   tym_binh_luan?: Prisma.tym_binh_luanUncheckedUpdateManyWithoutNguoi_dungNestedInput
   thong_bao_gui?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_guiNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_theo_doiNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
+}
+
+export type nguoi_dungCreateWithoutNguoi_theo_doiInput = {
+  email: string
+  mat_khau?: string | null
+  ho_ten?: string | null
+  tuoi?: number | null
+  anh_dai_dien?: string | null
+  mo_ta?: string | null
+  google_id?: string | null
+  quyen_rieng_tu?: string | null
+  deletedBy?: number
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  binh_luan?: Prisma.binh_luanCreateNestedManyWithoutNguoi_dungInput
+  hinh_anh?: Prisma.hinh_anhCreateNestedManyWithoutNguoi_dungInput
+  luu_anh?: Prisma.luu_anhCreateNestedManyWithoutNguoi_dungInput
+  tym_anh?: Prisma.tym_anhCreateNestedManyWithoutNguoi_dungInput
+  tym_binh_luan?: Prisma.tym_binh_luanCreateNestedManyWithoutNguoi_dungInput
+  thong_bao_gui?: Prisma.thong_baoCreateNestedManyWithoutNguoi_guiInput
+  thong_bao_nhan?: Prisma.thong_baoCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_duoc_theo_doiInput
+}
+
+export type nguoi_dungUncheckedCreateWithoutNguoi_theo_doiInput = {
+  nguoi_dung_id?: number
+  email: string
+  mat_khau?: string | null
+  ho_ten?: string | null
+  tuoi?: number | null
+  anh_dai_dien?: string | null
+  mo_ta?: string | null
+  google_id?: string | null
+  quyen_rieng_tu?: string | null
+  deletedBy?: number
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  binh_luan?: Prisma.binh_luanUncheckedCreateNestedManyWithoutNguoi_dungInput
+  hinh_anh?: Prisma.hinh_anhUncheckedCreateNestedManyWithoutNguoi_dungInput
+  luu_anh?: Prisma.luu_anhUncheckedCreateNestedManyWithoutNguoi_dungInput
+  tym_anh?: Prisma.tym_anhUncheckedCreateNestedManyWithoutNguoi_dungInput
+  tym_binh_luan?: Prisma.tym_binh_luanUncheckedCreateNestedManyWithoutNguoi_dungInput
+  thong_bao_gui?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_guiInput
+  thong_bao_nhan?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_duoc_theo_doiInput
+}
+
+export type nguoi_dungCreateOrConnectWithoutNguoi_theo_doiInput = {
+  where: Prisma.nguoi_dungWhereUniqueInput
+  create: Prisma.XOR<Prisma.nguoi_dungCreateWithoutNguoi_theo_doiInput, Prisma.nguoi_dungUncheckedCreateWithoutNguoi_theo_doiInput>
+}
+
+export type nguoi_dungCreateWithoutNguoi_duoc_theo_doiInput = {
+  email: string
+  mat_khau?: string | null
+  ho_ten?: string | null
+  tuoi?: number | null
+  anh_dai_dien?: string | null
+  mo_ta?: string | null
+  google_id?: string | null
+  quyen_rieng_tu?: string | null
+  deletedBy?: number
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  binh_luan?: Prisma.binh_luanCreateNestedManyWithoutNguoi_dungInput
+  hinh_anh?: Prisma.hinh_anhCreateNestedManyWithoutNguoi_dungInput
+  luu_anh?: Prisma.luu_anhCreateNestedManyWithoutNguoi_dungInput
+  tym_anh?: Prisma.tym_anhCreateNestedManyWithoutNguoi_dungInput
+  tym_binh_luan?: Prisma.tym_binh_luanCreateNestedManyWithoutNguoi_dungInput
+  thong_bao_gui?: Prisma.thong_baoCreateNestedManyWithoutNguoi_guiInput
+  thong_bao_nhan?: Prisma.thong_baoCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_theo_doi?: Prisma.theo_doiCreateNestedManyWithoutNguoi_theo_doiInput
+}
+
+export type nguoi_dungUncheckedCreateWithoutNguoi_duoc_theo_doiInput = {
+  nguoi_dung_id?: number
+  email: string
+  mat_khau?: string | null
+  ho_ten?: string | null
+  tuoi?: number | null
+  anh_dai_dien?: string | null
+  mo_ta?: string | null
+  google_id?: string | null
+  quyen_rieng_tu?: string | null
+  deletedBy?: number
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  binh_luan?: Prisma.binh_luanUncheckedCreateNestedManyWithoutNguoi_dungInput
+  hinh_anh?: Prisma.hinh_anhUncheckedCreateNestedManyWithoutNguoi_dungInput
+  luu_anh?: Prisma.luu_anhUncheckedCreateNestedManyWithoutNguoi_dungInput
+  tym_anh?: Prisma.tym_anhUncheckedCreateNestedManyWithoutNguoi_dungInput
+  tym_binh_luan?: Prisma.tym_binh_luanUncheckedCreateNestedManyWithoutNguoi_dungInput
+  thong_bao_gui?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_guiInput
+  thong_bao_nhan?: Prisma.thong_baoUncheckedCreateNestedManyWithoutNguoi_nhanInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedCreateNestedManyWithoutNguoi_theo_doiInput
+}
+
+export type nguoi_dungCreateOrConnectWithoutNguoi_duoc_theo_doiInput = {
+  where: Prisma.nguoi_dungWhereUniqueInput
+  create: Prisma.XOR<Prisma.nguoi_dungCreateWithoutNguoi_duoc_theo_doiInput, Prisma.nguoi_dungUncheckedCreateWithoutNguoi_duoc_theo_doiInput>
+}
+
+export type nguoi_dungUpsertWithoutNguoi_theo_doiInput = {
+  update: Prisma.XOR<Prisma.nguoi_dungUpdateWithoutNguoi_theo_doiInput, Prisma.nguoi_dungUncheckedUpdateWithoutNguoi_theo_doiInput>
+  create: Prisma.XOR<Prisma.nguoi_dungCreateWithoutNguoi_theo_doiInput, Prisma.nguoi_dungUncheckedCreateWithoutNguoi_theo_doiInput>
+  where?: Prisma.nguoi_dungWhereInput
+}
+
+export type nguoi_dungUpdateToOneWithWhereWithoutNguoi_theo_doiInput = {
+  where?: Prisma.nguoi_dungWhereInput
+  data: Prisma.XOR<Prisma.nguoi_dungUpdateWithoutNguoi_theo_doiInput, Prisma.nguoi_dungUncheckedUpdateWithoutNguoi_theo_doiInput>
+}
+
+export type nguoi_dungUpdateWithoutNguoi_theo_doiInput = {
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  mat_khau?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ho_ten?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tuoi?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  binh_luan?: Prisma.binh_luanUpdateManyWithoutNguoi_dungNestedInput
+  hinh_anh?: Prisma.hinh_anhUpdateManyWithoutNguoi_dungNestedInput
+  luu_anh?: Prisma.luu_anhUpdateManyWithoutNguoi_dungNestedInput
+  tym_anh?: Prisma.tym_anhUpdateManyWithoutNguoi_dungNestedInput
+  tym_binh_luan?: Prisma.tym_binh_luanUpdateManyWithoutNguoi_dungNestedInput
+  thong_bao_gui?: Prisma.thong_baoUpdateManyWithoutNguoi_guiNestedInput
+  thong_bao_nhan?: Prisma.thong_baoUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
+}
+
+export type nguoi_dungUncheckedUpdateWithoutNguoi_theo_doiInput = {
+  nguoi_dung_id?: Prisma.IntFieldUpdateOperationsInput | number
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  mat_khau?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ho_ten?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tuoi?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  binh_luan?: Prisma.binh_luanUncheckedUpdateManyWithoutNguoi_dungNestedInput
+  hinh_anh?: Prisma.hinh_anhUncheckedUpdateManyWithoutNguoi_dungNestedInput
+  luu_anh?: Prisma.luu_anhUncheckedUpdateManyWithoutNguoi_dungNestedInput
+  tym_anh?: Prisma.tym_anhUncheckedUpdateManyWithoutNguoi_dungNestedInput
+  tym_binh_luan?: Prisma.tym_binh_luanUncheckedUpdateManyWithoutNguoi_dungNestedInput
+  thong_bao_gui?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_guiNestedInput
+  thong_bao_nhan?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_duoc_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_duoc_theo_doiNestedInput
+}
+
+export type nguoi_dungUpsertWithoutNguoi_duoc_theo_doiInput = {
+  update: Prisma.XOR<Prisma.nguoi_dungUpdateWithoutNguoi_duoc_theo_doiInput, Prisma.nguoi_dungUncheckedUpdateWithoutNguoi_duoc_theo_doiInput>
+  create: Prisma.XOR<Prisma.nguoi_dungCreateWithoutNguoi_duoc_theo_doiInput, Prisma.nguoi_dungUncheckedCreateWithoutNguoi_duoc_theo_doiInput>
+  where?: Prisma.nguoi_dungWhereInput
+}
+
+export type nguoi_dungUpdateToOneWithWhereWithoutNguoi_duoc_theo_doiInput = {
+  where?: Prisma.nguoi_dungWhereInput
+  data: Prisma.XOR<Prisma.nguoi_dungUpdateWithoutNguoi_duoc_theo_doiInput, Prisma.nguoi_dungUncheckedUpdateWithoutNguoi_duoc_theo_doiInput>
+}
+
+export type nguoi_dungUpdateWithoutNguoi_duoc_theo_doiInput = {
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  mat_khau?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ho_ten?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tuoi?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  binh_luan?: Prisma.binh_luanUpdateManyWithoutNguoi_dungNestedInput
+  hinh_anh?: Prisma.hinh_anhUpdateManyWithoutNguoi_dungNestedInput
+  luu_anh?: Prisma.luu_anhUpdateManyWithoutNguoi_dungNestedInput
+  tym_anh?: Prisma.tym_anhUpdateManyWithoutNguoi_dungNestedInput
+  tym_binh_luan?: Prisma.tym_binh_luanUpdateManyWithoutNguoi_dungNestedInput
+  thong_bao_gui?: Prisma.thong_baoUpdateManyWithoutNguoi_guiNestedInput
+  thong_bao_nhan?: Prisma.thong_baoUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUpdateManyWithoutNguoi_theo_doiNestedInput
+}
+
+export type nguoi_dungUncheckedUpdateWithoutNguoi_duoc_theo_doiInput = {
+  nguoi_dung_id?: Prisma.IntFieldUpdateOperationsInput | number
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  mat_khau?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ho_ten?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tuoi?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  anh_dai_dien?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mo_ta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  google_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quyen_rieng_tu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedBy?: Prisma.IntFieldUpdateOperationsInput | number
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  binh_luan?: Prisma.binh_luanUncheckedUpdateManyWithoutNguoi_dungNestedInput
+  hinh_anh?: Prisma.hinh_anhUncheckedUpdateManyWithoutNguoi_dungNestedInput
+  luu_anh?: Prisma.luu_anhUncheckedUpdateManyWithoutNguoi_dungNestedInput
+  tym_anh?: Prisma.tym_anhUncheckedUpdateManyWithoutNguoi_dungNestedInput
+  tym_binh_luan?: Prisma.tym_binh_luanUncheckedUpdateManyWithoutNguoi_dungNestedInput
+  thong_bao_gui?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_guiNestedInput
+  thong_bao_nhan?: Prisma.thong_baoUncheckedUpdateManyWithoutNguoi_nhanNestedInput
+  nguoi_theo_doi?: Prisma.theo_doiUncheckedUpdateManyWithoutNguoi_theo_doiNestedInput
 }
 
 
@@ -1456,6 +1832,8 @@ export type Nguoi_dungCountOutputType = {
   tym_binh_luan: number
   thong_bao_gui: number
   thong_bao_nhan: number
+  nguoi_theo_doi: number
+  nguoi_duoc_theo_doi: number
 }
 
 export type Nguoi_dungCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1466,6 +1844,8 @@ export type Nguoi_dungCountOutputTypeSelect<ExtArgs extends runtime.Types.Extens
   tym_binh_luan?: boolean | Nguoi_dungCountOutputTypeCountTym_binh_luanArgs
   thong_bao_gui?: boolean | Nguoi_dungCountOutputTypeCountThong_bao_guiArgs
   thong_bao_nhan?: boolean | Nguoi_dungCountOutputTypeCountThong_bao_nhanArgs
+  nguoi_theo_doi?: boolean | Nguoi_dungCountOutputTypeCountNguoi_theo_doiArgs
+  nguoi_duoc_theo_doi?: boolean | Nguoi_dungCountOutputTypeCountNguoi_duoc_theo_doiArgs
 }
 
 /**
@@ -1527,6 +1907,20 @@ export type Nguoi_dungCountOutputTypeCountThong_bao_nhanArgs<ExtArgs extends run
   where?: Prisma.thong_baoWhereInput
 }
 
+/**
+ * Nguoi_dungCountOutputType without action
+ */
+export type Nguoi_dungCountOutputTypeCountNguoi_theo_doiArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.theo_doiWhereInput
+}
+
+/**
+ * Nguoi_dungCountOutputType without action
+ */
+export type Nguoi_dungCountOutputTypeCountNguoi_duoc_theo_doiArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.theo_doiWhereInput
+}
+
 
 export type nguoi_dungSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   nguoi_dung_id?: boolean
@@ -1537,6 +1931,7 @@ export type nguoi_dungSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   anh_dai_dien?: boolean
   mo_ta?: boolean
   google_id?: boolean
+  quyen_rieng_tu?: boolean
   deletedBy?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
@@ -1549,6 +1944,8 @@ export type nguoi_dungSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   tym_binh_luan?: boolean | Prisma.nguoi_dung$tym_binh_luanArgs<ExtArgs>
   thong_bao_gui?: boolean | Prisma.nguoi_dung$thong_bao_guiArgs<ExtArgs>
   thong_bao_nhan?: boolean | Prisma.nguoi_dung$thong_bao_nhanArgs<ExtArgs>
+  nguoi_theo_doi?: boolean | Prisma.nguoi_dung$nguoi_theo_doiArgs<ExtArgs>
+  nguoi_duoc_theo_doi?: boolean | Prisma.nguoi_dung$nguoi_duoc_theo_doiArgs<ExtArgs>
   _count?: boolean | Prisma.Nguoi_dungCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["nguoi_dung"]>
 
@@ -1563,6 +1960,7 @@ export type nguoi_dungSelectScalar = {
   anh_dai_dien?: boolean
   mo_ta?: boolean
   google_id?: boolean
+  quyen_rieng_tu?: boolean
   deletedBy?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
@@ -1570,7 +1968,7 @@ export type nguoi_dungSelectScalar = {
   updatedAt?: boolean
 }
 
-export type nguoi_dungOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"nguoi_dung_id" | "email" | "mat_khau" | "ho_ten" | "tuoi" | "anh_dai_dien" | "mo_ta" | "google_id" | "deletedBy" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["nguoi_dung"]>
+export type nguoi_dungOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"nguoi_dung_id" | "email" | "mat_khau" | "ho_ten" | "tuoi" | "anh_dai_dien" | "mo_ta" | "google_id" | "quyen_rieng_tu" | "deletedBy" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["nguoi_dung"]>
 export type nguoi_dungInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   binh_luan?: boolean | Prisma.nguoi_dung$binh_luanArgs<ExtArgs>
   hinh_anh?: boolean | Prisma.nguoi_dung$hinh_anhArgs<ExtArgs>
@@ -1579,6 +1977,8 @@ export type nguoi_dungInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   tym_binh_luan?: boolean | Prisma.nguoi_dung$tym_binh_luanArgs<ExtArgs>
   thong_bao_gui?: boolean | Prisma.nguoi_dung$thong_bao_guiArgs<ExtArgs>
   thong_bao_nhan?: boolean | Prisma.nguoi_dung$thong_bao_nhanArgs<ExtArgs>
+  nguoi_theo_doi?: boolean | Prisma.nguoi_dung$nguoi_theo_doiArgs<ExtArgs>
+  nguoi_duoc_theo_doi?: boolean | Prisma.nguoi_dung$nguoi_duoc_theo_doiArgs<ExtArgs>
   _count?: boolean | Prisma.Nguoi_dungCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -1592,6 +1992,8 @@ export type $nguoi_dungPayload<ExtArgs extends runtime.Types.Extensions.Internal
     tym_binh_luan: Prisma.$tym_binh_luanPayload<ExtArgs>[]
     thong_bao_gui: Prisma.$thong_baoPayload<ExtArgs>[]
     thong_bao_nhan: Prisma.$thong_baoPayload<ExtArgs>[]
+    nguoi_theo_doi: Prisma.$theo_doiPayload<ExtArgs>[]
+    nguoi_duoc_theo_doi: Prisma.$theo_doiPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     nguoi_dung_id: number
@@ -1602,6 +2004,7 @@ export type $nguoi_dungPayload<ExtArgs extends runtime.Types.Extensions.Internal
     anh_dai_dien: string | null
     mo_ta: string | null
     google_id: string | null
+    quyen_rieng_tu: string | null
     deletedBy: number
     isDeleted: boolean
     deletedAt: Date | null
@@ -1954,6 +2357,8 @@ export interface Prisma__nguoi_dungClient<T, Null = never, ExtArgs extends runti
   tym_binh_luan<T extends Prisma.nguoi_dung$tym_binh_luanArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.nguoi_dung$tym_binh_luanArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tym_binh_luanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   thong_bao_gui<T extends Prisma.nguoi_dung$thong_bao_guiArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.nguoi_dung$thong_bao_guiArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$thong_baoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   thong_bao_nhan<T extends Prisma.nguoi_dung$thong_bao_nhanArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.nguoi_dung$thong_bao_nhanArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$thong_baoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  nguoi_theo_doi<T extends Prisma.nguoi_dung$nguoi_theo_doiArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.nguoi_dung$nguoi_theo_doiArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$theo_doiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  nguoi_duoc_theo_doi<T extends Prisma.nguoi_dung$nguoi_duoc_theo_doiArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.nguoi_dung$nguoi_duoc_theo_doiArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$theo_doiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1991,6 +2396,7 @@ export interface nguoi_dungFieldRefs {
   readonly anh_dai_dien: Prisma.FieldRef<"nguoi_dung", 'String'>
   readonly mo_ta: Prisma.FieldRef<"nguoi_dung", 'String'>
   readonly google_id: Prisma.FieldRef<"nguoi_dung", 'String'>
+  readonly quyen_rieng_tu: Prisma.FieldRef<"nguoi_dung", 'String'>
   readonly deletedBy: Prisma.FieldRef<"nguoi_dung", 'Int'>
   readonly isDeleted: Prisma.FieldRef<"nguoi_dung", 'Boolean'>
   readonly deletedAt: Prisma.FieldRef<"nguoi_dung", 'DateTime'>
@@ -2509,6 +2915,54 @@ export type nguoi_dung$thong_bao_nhanArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.Thong_baoScalarFieldEnum | Prisma.Thong_baoScalarFieldEnum[]
+}
+
+/**
+ * nguoi_dung.nguoi_theo_doi
+ */
+export type nguoi_dung$nguoi_theo_doiArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the theo_doi
+   */
+  select?: Prisma.theo_doiSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the theo_doi
+   */
+  omit?: Prisma.theo_doiOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.theo_doiInclude<ExtArgs> | null
+  where?: Prisma.theo_doiWhereInput
+  orderBy?: Prisma.theo_doiOrderByWithRelationInput | Prisma.theo_doiOrderByWithRelationInput[]
+  cursor?: Prisma.theo_doiWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Theo_doiScalarFieldEnum | Prisma.Theo_doiScalarFieldEnum[]
+}
+
+/**
+ * nguoi_dung.nguoi_duoc_theo_doi
+ */
+export type nguoi_dung$nguoi_duoc_theo_doiArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the theo_doi
+   */
+  select?: Prisma.theo_doiSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the theo_doi
+   */
+  omit?: Prisma.theo_doiOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.theo_doiInclude<ExtArgs> | null
+  where?: Prisma.theo_doiWhereInput
+  orderBy?: Prisma.theo_doiOrderByWithRelationInput | Prisma.theo_doiOrderByWithRelationInput[]
+  cursor?: Prisma.theo_doiWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Theo_doiScalarFieldEnum | Prisma.Theo_doiScalarFieldEnum[]
 }
 
 /**

@@ -6,6 +6,7 @@ import savedImageRouter from "./savedImage.router.js";
 import userRouter from "./user.router.js";
 import notificationRouter from "./notification.router.js";
 import likeRouter from "./like.router.js";
+import followRouter from "./follow.router.js";
 
 const rootRouter = express.Router();
 
@@ -16,5 +17,6 @@ rootRouter.use("/saved-images", savedImageRouter);
 rootRouter.use("/likes", likeRouter);
 rootRouter.use("/users", userRouter);
 rootRouter.use("/notifications", notificationRouter);
+rootRouter.use("/follow", followRouter);
 
 export default rootRouter;

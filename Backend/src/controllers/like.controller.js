@@ -51,4 +51,24 @@ export const likeController = {
       next(err);
     }
   },
+
+  async batchUnlikeImages(req, res, next) {
+    try {
+      const result = await likeService.batchUnlikeImages(req);
+      const response = responseSuccess(result, result.message);
+      res.status(response.statusCode).json(response);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async batchUnlikeComments(req, res, next) {
+    try {
+      const result = await likeService.batchUnlikeComments(req);
+      const response = responseSuccess(result, result.message);
+      res.status(response.statusCode).json(response);
+    } catch (err) {
+      next(err);
+    }
+  },
 };

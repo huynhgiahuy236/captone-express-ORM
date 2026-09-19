@@ -104,4 +104,22 @@ export const savedImageService = {
       };
     }
   },
+
+  async batchUnsave(req) {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      throw new BadRequestException("Danh sách ID không hợp lệ");
+    }
+
+    const numIds = ids.map(Number).filter(Boolean);
+
+    await prisma.luu_anh.deleteMany({
+      where: {
+        nguoi_dung_id: req.user.nguoi_dung_id,
+        hinh_id: { in: numIds },
+      },
+    });
+
+    return { message: `Đã bỏ lưu thành công ${numIds.length} hình ảnh`, count: numIds.length };
+  },
 };
