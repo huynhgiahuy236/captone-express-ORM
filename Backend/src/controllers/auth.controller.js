@@ -1,5 +1,6 @@
 import { responseSuccess } from "../common/helpers/response.helper.js";
 import { authService } from "../services/auth.service.js";
+import { FRONTEND_URL } from "../common/constants/app.constant.js";
 
 export const authController = {
   async register(req, res, next) {
@@ -51,8 +52,10 @@ export const authController = {
   async googleCallback(req, res) {
     const accessToken = req.user?.accessToken || "";
     const refreshToken = req.user?.refreshToken || "";
+    const targetFrontend = (FRONTEND_URL || "http://localhost:3000").replace(/\/$/, "");
+
     res.cookie("accessToken", accessToken, { httpOnly: true });
     res.cookie("refreshToken", refreshToken, { httpOnly: true });
-    res.redirect(`http://localhost:3000/login-callback?accessToken=${accessToken}&refreshToken=${refreshToken}`);
+    res.redirect(`${targetFrontend}/login-callback?accessToken=${accessToken}&refreshToken=${refreshToken}`);
   },
 };

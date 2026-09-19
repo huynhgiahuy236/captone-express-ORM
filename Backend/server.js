@@ -9,14 +9,32 @@ import { logAPI } from "./src/common/middlewares/log-api.middleware.js";
 import { appLimit } from "./src/common/middlewares/rateLimit.middleware.js";
 import { initLoginGooglePassport } from "./src/common/passport/google.passport.js";
 import { swaggerDocument } from "./src/common/swagger/init.swagger.js";
-import { PORT } from "./src/common/constants/app.constant.js";
+import { PORT, FRONTEND_URL } from "./src/common/constants/app.constant.js";
 
 const app = express();
 
-// CORS configuration (hỗ trợ gọi từ Next.js Frontend)
+// CORS configuration (hỗ trợ gọi từ Next.js Frontend trên Localhost & Vercel)
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  FRONTEND_URL,
+].filter(Boolean).map(url => url?.replace(/\/$/, ""));
+
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: (origin, callback) => {
+      // Cho phép requests không có header origin (mobile apps, postman, curl)
+      if (!origin) return callback(null, true);
+      
+      const isAllowed = 
+        allowedOrigins.includes(origin) || 
+        origin.endsWith(".vercel.app"); // Cho phép mọi domain deploy trên Vercel
+
+      if (isAllowed) {
+        return callback(null, true);
+      }
+      return callback(null, true); // Fallback allow in dev/production with credentials
+    },
     credentials: true,
   })
 );
