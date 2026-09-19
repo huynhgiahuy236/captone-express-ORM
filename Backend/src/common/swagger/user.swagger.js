@@ -69,6 +69,7 @@ export const userSwagger = {
   "/api/users/{userId}": {
     get: {
       tags: ["Users"],
+      security: [{ bearerAuth: [] }, {}],
       parameters: [
         {
           name: "userId",
@@ -99,6 +100,7 @@ export const userSwagger = {
   "/api/users/saved-images/{userId}": {
     get: {
       tags: ["Users"],
+      security: [{ bearerAuth: [] }, {}],
       parameters: [
         {
           name: "userId",
@@ -130,6 +132,7 @@ export const userSwagger = {
   "/api/users/created-images/{userId}": {
     get: {
       tags: ["Users"],
+      security: [{ bearerAuth: [] }, {}],
       parameters: [
         {
           name: "userId",
