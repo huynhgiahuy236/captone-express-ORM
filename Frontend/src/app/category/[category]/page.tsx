@@ -21,7 +21,7 @@ export default function CategoryPage() {
     if (!categoryName) return;
     setLoading(true);
     try {
-      const res = await api.get("/images?pageSize=50");
+      const res = await api.get("/images?pageSize=100");
       const allItems: ImageItem[] = res.data?.data?.items || res.data?.data || [];
       
       const targetLower = categoryName.trim().toLowerCase();

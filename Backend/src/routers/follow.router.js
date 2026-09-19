@@ -5,6 +5,7 @@ import { protect, optionalProtect } from "../common/middlewares/protect.middlewa
 const followRouter = express.Router();
 
 // Toggle follow / unfollow author
+followRouter.post("/toggle/:authorId", protect, followController.toggleFollow);
 followRouter.post("/:authorId", protect, followController.toggleFollow);
 
 // Check follow status and get counts

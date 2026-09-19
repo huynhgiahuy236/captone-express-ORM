@@ -6,10 +6,16 @@ const likeRouter = express.Router();
 
 // Like image
 likeRouter.post("/image/toggle/:imageId", protect, likeController.toggleLikeImage);
+likeRouter.post("/toggle-image/:imageId", protect, likeController.toggleLikeImage);
+likeRouter.post("/toggle/:imageId", protect, likeController.toggleLikeImage);
 likeRouter.get("/image/check/:imageId", optionalProtect, likeController.checkLikeImage);
+likeRouter.get("/check-image/:imageId", optionalProtect, likeController.checkLikeImage);
+likeRouter.get("/check/:imageId", optionalProtect, likeController.checkLikeImage);
 
 // Like comment
 likeRouter.post("/comment/toggle/:commentId", protect, likeController.toggleLikeComment);
+likeRouter.post("/toggle-comment/:commentId", protect, likeController.toggleLikeComment);
+likeRouter.get("/comment/check/:commentId", optionalProtect, likeController.checkLikeImage);
 
 // Liked lists
 likeRouter.post("/batch-unlike-images", protect, likeController.batchUnlikeImages);

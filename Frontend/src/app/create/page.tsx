@@ -91,7 +91,7 @@ export default function CreatePinPage() {
   useEffect(() => {
     const fetchExistingCategories = async () => {
       try {
-        const res = await api.get("/images?pageSize=50");
+        const res = await api.get("/images?pageSize=100");
         const items = res.data?.data?.items || res.data?.data || [];
         const seen = new Set<string>();
         const list: string[] = [];

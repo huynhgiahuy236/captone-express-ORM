@@ -162,15 +162,31 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
-
-    if (!validateForm()) {
-      setModalTab("info");
-      return;
-    }
-
     setSubmitting(true);
+
     try {
-      // 1. Update Profile Info
+      if (modalTab === "privacy") {
+        // Lưu riêng quyền riêng tư khi đang ở tab Privacy
+        const privacyRes = await api.put("/users/privacy", privacy);
+        const updatedPrivacy = privacyRes.data?.data || privacy;
+        updateUser({
+          ...user,
+          privacySettings: updatedPrivacy,
+        });
+        await refreshUserInfo();
+        toast.success("Cập nhật quyền riêng tư thành công!");
+        onSuccess?.();
+        onClose();
+        return;
+      }
+
+      // Tab Thông tin cá nhân: Validate thông tin
+      if (!validateForm()) {
+        setModalTab("info");
+        setSubmitting(false);
+        return;
+      }
+
       const formData = new FormData();
       formData.append("fullName", fullName);
       formData.append("bio", bio.trim());

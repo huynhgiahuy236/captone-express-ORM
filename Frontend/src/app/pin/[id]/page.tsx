@@ -227,7 +227,7 @@ export default function PinDetailPage() {
       }
 
       // Fetch all pins for matching
-      const relatedRes = await api.get("/images?pageSize=50");
+      const relatedRes = await api.get("/images?pageSize=100");
       const allPins: ImageItem[] = relatedRes.data?.data?.items || relatedRes.data?.data || [];
       const otherPins = allPins.filter((p: ImageItem) => p.hinh_id !== Number(id));
 
