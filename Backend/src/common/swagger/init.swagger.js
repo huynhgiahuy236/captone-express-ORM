@@ -3,6 +3,8 @@ import { imageSwagger } from "./image.swagger.js";
 import { commentSwagger } from "./comment.swagger.js";
 import { savedImageSwagger } from "./savedImage.swagger.js";
 import { userSwagger } from "./user.swagger.js";
+import { likeSwagger } from "./like.swagger.js";
+import { followSwagger } from "./follow.swagger.js";
 
 export const swaggerDocument = {
   openapi: "3.0.0",
@@ -33,5 +35,7 @@ export const swaggerDocument = {
     ...imageSwagger,
     ...savedImageSwagger,
     ...userSwagger,
+    ...likeSwagger,
+    ...followSwagger,
   },
 };

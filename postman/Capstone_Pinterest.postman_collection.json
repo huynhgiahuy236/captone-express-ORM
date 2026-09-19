@@ -1,590 +1,763 @@
 {
-	"info": {
-		"_postman_id": "8f8a1c90-capstone-pinterest-56",
-		"name": "Capstone Pinterest API",
-		"description": "API Test Collection for Pinterest Clone Capstone (Express, Prisma ORM, Cloudinary, JWT, Google OAuth)",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "1. Auth",
-			"item": [
-				{
-					"name": "1.1 Sign Up (/api/auth/signup)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"testuser@gmail.com\",\n    \"password\": \"123456\",\n    \"fullName\": \"John Doe\",\n    \"age\": 22\n}"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/signup",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"signup"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "1.2 Sign In (/api/auth/signin)",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const jsonData = pm.response.json();",
-									"if (jsonData.data && jsonData.data.accessToken) {",
-									"    pm.environment.set('accessToken', jsonData.data.accessToken);",
-									"    pm.collectionVariables.set('accessToken', jsonData.data.accessToken);",
-									"    console.log('AccessToken saved successfully!');",
-									"}",
-									"if (jsonData.data && jsonData.data.refreshToken) {",
-									"    pm.environment.set('refreshToken', jsonData.data.refreshToken);",
-									"    pm.collectionVariables.set('refreshToken', jsonData.data.refreshToken);",
-									"}"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"sangnguyen@gmail.com\",\n    \"password\": \"123456\"\n}"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/signin",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"signin"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "1.3 Get Current User Info (/api/auth/info)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/auth/info",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"info"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "1.4 Refresh Token (/api/auth/refresh-token)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"refreshToken\": \"{{refreshToken}}\"\n}"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/refresh-token",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"refresh-token"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "2. Images",
-			"item": [
-				{
-					"name": "2.1 Get Images List (/api/images)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/images?page=1&pageSize=12",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"images"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "1"
-								},
-								{
-									"key": "pageSize",
-									"value": "12"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "2.2 Search Images by Name (/api/images/search)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/images/search?name=dog",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"images",
-								"search"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "dog"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "2.3 Get Image Detail by ID (/api/images/1)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/images/1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"images",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "2.4 Create Image (/api/images - Cloudinary Upload)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "title",
-									"value": "Autumn Sunset Landscape",
-									"type": "text"
-								},
-								{
-									"key": "description",
-									"value": "Beautiful sunset artwork in vintage style",
-									"type": "text"
-								},
-								{
-									"key": "file",
-									"type": "file",
-									"src": []
-								}
-							]
-						},
-						"url": {
-							"raw": "{{baseUrl}}/images",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"images"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "2.5 Delete Created Image (/api/images/1)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/images/1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"images",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "3. Comments",
-			"item": [
-				{
-					"name": "3.1 Get Comments by Image ID (/api/comments/image/1)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/comments/image/1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"comments",
-								"image",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "3.2 Create Comment (/api/comments)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"imageId\": 1,\n    \"content\": \"This artwork looks totally amazing!\"\n}"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/comments",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"comments"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "4. SavedImages",
-			"item": [
-				{
-					"name": "4.1 Check Saved Image Status (/api/saved-images/check/1)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/saved-images/check/1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"saved-images",
-								"check",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "4.2 Toggle Save/Unsave Image (/api/saved-images/toggle/1)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/saved-images/toggle/1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"saved-images",
-								"toggle",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "5. Users",
-			"item": [
-				{
-					"name": "5.1 Get User Profile (/api/users/profile)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/users/profile",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"users",
-								"profile"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "5.2 Get Saved Images List (/api/users/saved-images)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/users/saved-images",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"users",
-								"saved-images"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "5.3 Get Created Images List (/api/users/created-images)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/users/created-images",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"users",
-								"created-images"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "5.4 Update Profile & Avatar (/api/users/profile)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "fullName",
-									"value": "Sang Nguyen Pro",
-									"type": "text"
-								},
-								{
-									"key": "age",
-									"value": "25",
-									"type": "text"
-								},
-								{
-									"key": "avatar",
-									"type": "file",
-									"src": []
-								}
-							]
-						},
-						"url": {
-							"raw": "{{baseUrl}}/users/profile",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"users",
-								"profile"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "baseUrl",
-			"value": "http://localhost:3069/api",
-			"type": "string"
-		},
-		{
-			"key": "accessToken",
-			"value": "",
-			"type": "string"
-		},
-		{
-			"key": "refreshToken",
-			"value": "",
-			"type": "string"
-		}
-	]
+  "info": {
+    "_postman_id": "8f8a1c90-capstone-pinterest-56",
+    "name": "Capstone Pinterest API (Express & Prisma)",
+    "description": "Comprehensive Postman API Collection for Pinterest Clone Capstone (Auth, Images, Comments, SavedImages, Likes, Follow, Profile & Privacy Settings)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3069/api",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createdImageId",
+      "value": "79",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Auth",
+      "item": [
+        {
+          "name": "1.1 Sign Up",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"testuser@gmail.com\",\n    \"password\": \"123456\",\n    \"fullName\": \"John Doe\",\n    \"age\": 22\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          }
+        },
+        {
+          "name": "1.2 Sign In",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.accessToken) {",
+                  "    pm.environment.set('accessToken', jsonData.data.accessToken);",
+                  "    pm.collectionVariables.set('accessToken', jsonData.data.accessToken);",
+                  "    console.log('AccessToken saved successfully!');",
+                  "}",
+                  "if (jsonData.data && jsonData.data.refreshToken) {",
+                  "    pm.environment.set('refreshToken', jsonData.data.refreshToken);",
+                  "    pm.collectionVariables.set('refreshToken', jsonData.data.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"sangnguyen@gmail.com\",\n    \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signin",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "signin"
+              ]
+            }
+          }
+        },
+        {
+          "name": "1.3 Get Current User Info",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/auth/info",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "info"
+              ]
+            }
+          }
+        },
+        {
+          "name": "1.4 Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh-token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "refresh-token"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Images",
+      "item": [
+        {
+          "name": "2.1 Get Images List",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/images?page=1&pageSize=12",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "images"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "12"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "2.2 Search Images by Name",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/images/search?name=xe",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "images",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "xe"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "2.3 Get Image Detail by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/images/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "images",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "2.4 Create Image",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData.data && (jsonData.data.hinh_id || jsonData.data.id)) {",
+                  "    const id = jsonData.data.hinh_id || jsonData.data.id;",
+                  "    pm.environment.set('createdImageId', id);",
+                  "    pm.collectionVariables.set('createdImageId', id);",
+                  "    console.log('Created Image ID saved:', id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "title",
+                  "value": "Siêu phẩm siêu xe Ferrari",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Bức ảnh xe thể thao đẳng cấp thế giới",
+                  "type": "text"
+                },
+                {
+                  "key": "category",
+                  "value": "Xe cộ",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/images",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "images"
+              ]
+            }
+          }
+        },
+        {
+          "name": "2.5 Delete Created Image",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/images/{{createdImageId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "images",
+                "{{createdImageId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Comments",
+      "item": [
+        {
+          "name": "3.1 Get Comments by Image ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/comments/image/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comments",
+                "image",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "3.2 Create Comment",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"imageId\": 1,\n    \"content\": \"Bức ảnh đẹp và chất lượng tuyệt vời!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comments"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Saved Images",
+      "item": [
+        {
+          "name": "4.1 Check Saved Image Status",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/saved-images/check/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "saved-images",
+                "check",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "4.2 Toggle Save/Unsave Image",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/saved-images/toggle/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "saved-images",
+                "toggle",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Users & Profile",
+      "item": [
+        {
+          "name": "5.1 Get User Profile",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/users/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "profile"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5.2 Update Profile & Avatar",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "fullName",
+                  "value": "Sang Nguyễn Pro",
+                  "type": "text"
+                },
+                {
+                  "key": "age",
+                  "value": "25",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Creative Designer & Photographer",
+                  "type": "text"
+                },
+                {
+                  "key": "avatar",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "profile"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5.3 Update Privacy Settings",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"created\": \"PUBLIC\",\n    \"saved\": \"PUBLIC\",\n    \"liked_pins\": \"PUBLIC\",\n    \"liked_comments\": \"PUBLIC\",\n    \"followers\": \"PUBLIC\",\n    \"following\": \"PUBLIC\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/privacy",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "privacy"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5.4 Get Public User by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/users/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5.5 Get Saved Images List",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/users/saved-images",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "saved-images"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5.6 Get Created Images List",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/users/created-images",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "created-images"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5.7 Get Liked Images List",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/users/liked-images",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "liked-images"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5.8 Get Liked Comments List",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/users/liked-comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "liked-comments"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Likes & Follow (Extra)",
+      "item": [
+        {
+          "name": "6.1 Toggle Like Image",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/likes/image/toggle/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "likes",
+                "image",
+                "toggle",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "6.2 Toggle Like Comment",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/likes/comment/toggle/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "likes",
+                "comment",
+                "toggle",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "6.3 Toggle Follow User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/follow/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "follow",
+                "2"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
 }

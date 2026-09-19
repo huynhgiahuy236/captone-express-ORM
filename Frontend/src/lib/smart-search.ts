@@ -26,27 +26,80 @@ export const isWordOrPhraseMatch = (fullText: string, sub: string): boolean => {
   return regex.test(fullText);
 };
 
-export const CATEGORY_SYNONYMS: Record<string, string[]> = {
-  "thú cưng": ["chó", "mèo", "cún", "pet", "dog", "cat", "puppy", "kitten", "thú", "động vật"],
-  "xe cộ": ["xe", "oto", "ô tô", "car", "motor", "mô tô", "xe máy", "bike", "phương tiện", "mustang", "porsche", "nissan"],
-  "công nghệ": ["tech", "game", "code", "máy tính", "laptop", "điện thoại", "phone", "ai", "ps4", "ps5", "tay cầm"],
-  "thiên nhiên": ["nature", "hoa", "cây", "rừng", "biển", "núi", "cảnh", "mây", "trời", "hoàng hôn"],
-  "ẩm thực": ["food", "món", "ăn", "uống", "nấu", "bánh", "cafe", "cà phê", "trà", "nước", "salad"],
-  "nghệ thuật": ["art", "vẽ", "tranh", "design", "thiết kế", "họa", "sơn dầu", "sketch"],
-  "kiến trúc": ["nhà", "building", "phòng", "nội thất", "kiến trúc", "công trình", "tháp", "chùa"],
-  "thời trang": ["fashion", "áo", "quần", "váy", "giày", "túi", "style", "outfit", "mặc"],
+export const WORD_SYNONYMS: Record<string, string[]> = {
+  "biển": ["biển", "đại dương", "bãi biển", "bờ biển", "hải đảo", "ocean", "sea", "beach", "sóng biển"],
+  "núi": ["núi", "đỉnh núi", "đồi", "mountain", "hill", "dãy núi"],
+  "rừng": ["rừng", "cây", "forest", "jungle", "nguyên sinh"],
+  "hoa": ["hoa", "bông", "flower", "rose", "tulip"],
+  "chó": ["chó", "cún", "dog", "puppy", "corgi", "husky", "shiba", "golden", "poodle", "bulldog"],
+  "mèo": ["mèo", "kitten", "meo", "mimi", "mướp", "scottish fold", "tai cụp"],
+  "xe": ["xe", "oto", "ô tô", "car", "motor", "mô tô", "xe máy", "bike", "phương tiện", "mustang", "porsche", "nissan", "bmw", "audi", "ferrari", "lamborghini", "siêu xe"],
+  "công nghệ": ["tech", "máy tính", "laptop", "điện thoại", "phone", "ai", "ps4", "ps5", "tay cầm", "setup", "pc", "gadget", "bàn phím"],
+  "game": ["game", "gaming", "gamer", "cyberpunk", "trò chơi"],
+  "ẩm thực": ["food", "món", "ăn", "uống", "nấu", "bánh", "cafe", "cà phê", "trà", "nước", "salad", "nướng", "quán", "cooking", "matcha"],
+  "anime": ["anime", "manga", "gundam", "wibu", "otaku", "hoạt hình"],
+  "kiến trúc": ["nhà", "building", "phòng", "nội thất", "kiến trúc", "công trình", "tháp", "chùa", "decor", "interior", "minimalist", "villa"],
+  "thời trang": ["fashion", "áo", "quần", "váy", "giày", "túi", "style", "outfit", "mặc", "streetwear"],
+};
+
+export const STOP_WORDS_MODIFIERS = [
+  "đẹp", "xinh", "cute", "ngon", "hay", "hot", "cực", "rất", "nhiều", "nhất", "dễ thương",
+  "cool", "ngầu", "vip", "pro", "nhỏ", "to", "lớn", "đỉnh", "chất", "mới", "xịn", "top", "siêu"
+];
+
+export const isTokenMatch = (origWords: string[], unaccentedWords: string[], target: string): boolean => {
+  if (!target) return false;
+  const targetTokens = cleanWords(target);
+  const unTargetTokens = targetTokens.map(removeVietnameseTones);
+
+  if (targetTokens.length === 1) {
+    const single = targetTokens[0];
+    const unSingle = unTargetTokens[0];
+
+    // Nếu từ có dấu tiếng Việt (ví dụ: 'chó', 'mèo', 'cún') -> ưu tiên so khớp có dấu
+    if (single !== unSingle) {
+      if (origWords.includes(single)) return true;
+    }
+    // Tránh từ 'cho' ăn nhầm giới từ 'cho' trong mô tả
+    if (unSingle === "cho") {
+      return origWords.includes("chó");
+    }
+    if (unSingle.length <= 3) {
+      return unaccentedWords.includes(unSingle);
+    }
+    return unaccentedWords.some((w) => w === unSingle || w.startsWith(unSingle));
+  }
+
+  // Khớp cụm từ nhiều từ (Multi-word phrase) theo thứ tự từ liền kề
+  for (let i = 0; i <= unaccentedWords.length - unTargetTokens.length; i++) {
+    let match = true;
+    for (let j = 0; j < unTargetTokens.length; j++) {
+      if (unaccentedWords[i + j] !== unTargetTokens[j]) {
+        match = false;
+        break;
+      }
+    }
+    if (match) return true;
+  }
+  return false;
 };
 
 /**
- * Bộ tìm kiếm thông minh đa tầng (Smart Relevance Search) cho danh sách Ghim / Ảnh
+ * Bộ tìm kiếm thông minh đa tầng linh hoạt (Flexible Smart Search) cho danh sách Ghim / Ảnh
  */
 export function smartFilterPins(pins: ImageItem[], rawQuery: string): ImageItem[] {
   const query = (rawQuery || "").trim().toLowerCase();
   if (!query) return pins;
 
+  const unaccentedStopWords = STOP_WORDS_MODIFIERS.map(removeVietnameseTones);
+
   const unaccentedQuery = removeVietnameseTones(query);
   const queryWords = cleanWords(query);
   const unaccentedQueryWords = queryWords.map(removeVietnameseTones);
+
+  // Xác định các từ khóa cốt lõi (loại bỏ từ bổ nghĩa)
+  let coreWords = queryWords.filter((w, idx) => !unaccentedStopWords.includes(unaccentedQueryWords[idx]));
+  if (coreWords.length === 0) coreWords = queryWords;
 
   const scored: { pin: ImageItem; score: number }[] = [];
 
@@ -54,76 +107,86 @@ export function smartFilterPins(pins: ImageItem[], rawQuery: string): ImageItem[
     const title = (pin.ten_hinh || "").toLowerCase();
     const desc = (pin.mo_ta || "").toLowerCase();
     const cat = (pin.the_loai || "").toLowerCase();
-
-    const titleWords = cleanWords(title);
-    const descWords = cleanWords(desc);
-    const catWords = cleanWords(cat);
-
-    const unTitleWords = titleWords.map(removeVietnameseTones);
-    const unDescWords = descWords.map(removeVietnameseTones);
-    const unCatWords = catWords.map(removeVietnameseTones);
+    const author = (pin.nguoi_dung?.ho_ten || "").toLowerCase();
 
     const unTitle = removeVietnameseTones(title);
     const unDesc = removeVietnameseTones(desc);
     const unCat = removeVietnameseTones(cat);
+    const unAuthor = removeVietnameseTones(author);
 
-    let score = 0;
+    const titleWords = cleanWords(title);
+    const descWords = cleanWords(desc);
+    const catWords = cleanWords(cat);
+    const authorWords = cleanWords(author);
 
-    // 1. Khớp chính xác cả cụm từ có dấu trong tiêu đề/thể loại/mô tả (Ưu tiên cao nhất)
-    if (title.includes(query)) score += 120;
-    else if (isWordOrPhraseMatch(unTitle, unaccentedQuery)) score += 60;
+    const unTitleWords = titleWords.map(removeVietnameseTones);
+    const unDescWords = descWords.map(removeVietnameseTones);
+    const unCatWords = catWords.map(removeVietnameseTones);
+    const unAuthorWords = authorWords.map(removeVietnameseTones);
 
-    if (cat.includes(query)) score += 60;
-    else if (isWordOrPhraseMatch(unCat, unaccentedQuery)) score += 30;
+    const origDocWords = [...titleWords, ...catWords, ...authorWords, ...descWords];
+    const allDocWords = [...unTitleWords, ...unCatWords, ...unAuthorWords, ...unDescWords];
 
-    if (desc.includes(query)) score += 40;
-    else if (isWordOrPhraseMatch(unDesc, unaccentedQuery)) score += 20;
-
-    // 2. So khớp từng từ nguyên vẹn (Whole-word matching)
-    queryWords.forEach((word, idx) => {
-      const unWord = unaccentedQueryWords[idx];
-
-      if (titleWords.includes(word)) score += 40;
-      else if (unTitleWords.includes(unWord)) score += 25;
-
-      if (catWords.includes(word)) score += 35;
-      else if (unCatWords.includes(unWord)) score += 20;
-
-      if (descWords.includes(word)) score += 15;
-      else if (unDescWords.includes(unWord)) score += 10;
-    });
-
-    // 3. Khớp đa từ (Khi người dùng gõ từ 2 từ trở lên: ví dụ "chó vàng", "tay cầm ps4")
-    if (queryWords.length > 1) {
-      const allDocWords = [...titleWords, ...descWords, ...catWords];
-      const allUnDocWords = [...unTitleWords, ...unDescWords, ...unCatWords];
-
-      const allExact = queryWords.every((w) => allDocWords.includes(w));
-      const allUnaccented = unaccentedQueryWords.every((w) => allUnDocWords.includes(w));
-
-      if (allExact) score += 80;
-      else if (allUnaccented) score += 45;
-    }
-
-    // 4. Khớp từ đồng nghĩa & thể loại liên quan
-    for (const [categoryName, keywords] of Object.entries(CATEGORY_SYNONYMS)) {
-      if (cat.includes(categoryName)) {
-        for (const kw of keywords) {
-          const unKw = removeVietnameseTones(kw);
-          if (queryWords.includes(kw) || unaccentedQueryWords.includes(unKw)) {
-            score += 20;
-            break;
+    // BẮT BUỘC: Phải khớp từ cốt lõi hoặc từ đồng nghĩa chính xác
+    const matchesAnyCore = coreWords.some((cw) => {
+      if (isTokenMatch(origDocWords, allDocWords, cw)) return true;
+      const unCw = removeVietnameseTones(cw);
+      for (const [, keywords] of Object.entries(WORD_SYNONYMS)) {
+        const unKeywords = keywords.map(removeVietnameseTones);
+        if (unKeywords.includes(unCw) || keywords.includes(cw)) {
+          if (keywords.some((syn) => isTokenMatch(origDocWords, allDocWords, syn))) {
+            return true;
           }
         }
       }
+      return false;
+    });
+
+    if (!matchesAnyCore) {
+      continue;
     }
 
-    if (score > 0) {
-      scored.push({ pin, score });
-    }
+    let score = 0;
+
+    // 1. Khớp chính xác toàn bộ chuỗi tìm kiếm (Exact phrase match)
+    if (title.includes(query)) score += 150;
+    else if (unTitle.includes(unaccentedQuery)) score += 100;
+
+    if (cat.includes(query)) score += 80;
+    else if (unCat.includes(unaccentedQuery)) score += 60;
+
+    if (author.includes(query)) score += 70;
+    else if (unAuthor.includes(unaccentedQuery)) score += 50;
+
+    if (desc.includes(query)) score += 40;
+    else if (unDesc.includes(unaccentedQuery)) score += 30;
+
+    // 2. So khớp linh hoạt từng từ (Flexible Token & Prefix matching)
+    queryWords.forEach((word, idx) => {
+      const unWord = unaccentedQueryWords[idx];
+      if (!unWord || unWord.length < 2) return;
+
+      const isCore = !unaccentedStopWords.includes(unWord);
+      const weightMultiplier = isCore ? 1.5 : 0.4;
+
+      if (titleWords.some((w) => w === word)) score += 40 * weightMultiplier;
+      else if (unTitleWords.some((w) => w === unWord)) score += 30 * weightMultiplier;
+      else if (unTitleWords.some((w) => w.startsWith(unWord))) score += 20 * weightMultiplier;
+
+      if (catWords.some((w) => w === word)) score += 35 * weightMultiplier;
+      else if (unCatWords.some((w) => w === unWord)) score += 25 * weightMultiplier;
+
+      if (descWords.some((w) => w === word)) score += 15 * weightMultiplier;
+      else if (unDescWords.some((w) => w === unWord)) score += 10 * weightMultiplier;
+    });
+
+    // 3. Thưởng nhẹ theo độ phổ biến thực tế (Lượt tim & lượt lưu)
+    const likes = (pin as any)._count?.tym_anh || 0;
+    const saves = (pin as any)._count?.luu_anh || 0;
+    score += Math.min(likes * 1.5 + saves * 2, 30);
+    scored.push({ pin, score });
   }
 
-  // Sắp xếp theo điểm độ liên quan giảm dần (Relevance Ranking)
   scored.sort((a, b) => b.score - a.score);
 
   return scored.map((item) => item.pin);

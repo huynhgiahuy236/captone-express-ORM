@@ -28,6 +28,21 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 
+function PrivateBadge({ title = "Quyền riêng tư đã được bật" }: { title?: string }) {
+  return (
+    <span
+      title={title}
+      className="inline-flex items-center justify-center shrink-0 ml-1"
+    >
+      <img
+        src="/icon-block-see.png"
+        alt="Quyền riêng tư"
+        className="h-4 w-4 object-contain opacity-75 dark:invert dark:opacity-85"
+      />
+    </span>
+  );
+}
+
 function ProfileTabSkeleton({ isComments = false }: { isComments?: boolean }) {
   if (isComments) {
     return (
@@ -418,20 +433,22 @@ export default function PublicUserProfilePage() {
                 <button
                   type="button"
                   onClick={() => setActiveTab("created")}
-                  className={`flex items-center gap-2 pb-1.5 text-xs sm:text-sm font-bold transition border-b-2 cursor-pointer ${
+                  className={`flex items-center gap-1.5 pb-2 text-xs sm:text-sm font-bold transition border-b-2 cursor-pointer ${
                     activeTab === "created"
                       ? "border-[#0052cc] text-[#0052cc] dark:text-blue-400"
-                      : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                      : author?.canViewCreated === false
+                      ? "border-transparent text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+                      : "border-transparent text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
-                  <Layers size={16} />
+                  <Layers size={17} />
                   <span>Tác phẩm đã tạo</span>
                   {author?.canViewCreated ? (
                     <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-[#252A42] font-semibold text-gray-600 dark:text-gray-300">
                       {createdPins.length}
                     </span>
                   ) : (
-                    <Lock size={13} className="text-amber-500 dark:text-amber-400" />
+                    <PrivateBadge title="Tác giả đã cài đặt riêng tư" />
                   )}
                 </button>
 
@@ -439,20 +456,22 @@ export default function PublicUserProfilePage() {
                 <button
                   type="button"
                   onClick={() => setActiveTab("saved")}
-                  className={`flex items-center gap-2 pb-1.5 text-xs sm:text-sm font-bold transition border-b-2 cursor-pointer ${
+                  className={`flex items-center gap-1.5 pb-2 text-xs sm:text-sm font-bold transition border-b-2 cursor-pointer ${
                     activeTab === "saved"
                       ? "border-[#0052cc] text-[#0052cc] dark:text-blue-400"
-                      : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                      : author?.canViewSaved === false
+                      ? "border-transparent text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+                      : "border-transparent text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
-                  <FolderHeart size={16} />
+                  <Bookmark size={17} />
                   <span>Folder & Ghim đã lưu</span>
                   {author?.canViewSaved ? (
                     <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-[#252A42] font-semibold text-gray-600 dark:text-gray-300">
                       {savedPins.length}
                     </span>
                   ) : (
-                    <Lock size={13} className="text-amber-500 dark:text-amber-400" />
+                    <PrivateBadge title="Tác giả đã cài đặt riêng tư" />
                   )}
                 </button>
 
@@ -460,20 +479,25 @@ export default function PublicUserProfilePage() {
                 <button
                   type="button"
                   onClick={() => setActiveTab("liked_pins")}
-                  className={`flex items-center gap-2 pb-1.5 text-xs sm:text-sm font-bold transition border-b-2 cursor-pointer ${
+                  className={`flex items-center gap-1.5 pb-2 text-xs sm:text-sm font-bold transition border-b-2 cursor-pointer ${
                     activeTab === "liked_pins"
                       ? "border-[#0052cc] text-[#0052cc] dark:text-blue-400"
-                      : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                      : author?.canViewLikedPins === false
+                      ? "border-transparent text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+                      : "border-transparent text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
-                  <Heart size={16} />
+                  <Heart
+                    size={17}
+                    className={activeTab === "liked_pins" ? "fill-rose-500 text-rose-500" : ""}
+                  />
                   <span>Ảnh đã thích</span>
                   {author?.canViewLikedPins ? (
                     <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-[#252A42] font-semibold text-gray-600 dark:text-gray-300">
                       {likedPins.length}
                     </span>
                   ) : (
-                    <Lock size={13} className="text-amber-500 dark:text-amber-400" />
+                    <PrivateBadge title="Tác giả đã cài đặt riêng tư" />
                   )}
                 </button>
 
@@ -481,20 +505,22 @@ export default function PublicUserProfilePage() {
                 <button
                   type="button"
                   onClick={() => setActiveTab("liked_comments")}
-                  className={`flex items-center gap-2 pb-1.5 text-xs sm:text-sm font-bold transition border-b-2 cursor-pointer ${
+                  className={`flex items-center gap-1.5 pb-2 text-xs sm:text-sm font-bold transition border-b-2 cursor-pointer ${
                     activeTab === "liked_comments"
                       ? "border-[#0052cc] text-[#0052cc] dark:text-blue-400"
-                      : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                      : author?.canViewLikedComments === false
+                      ? "border-transparent text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+                      : "border-transparent text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
-                  <MessageCircle size={16} />
+                  <MessageCircle size={17} />
                   <span>Bình luận đã thích</span>
                   {author?.canViewLikedComments ? (
                     <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-[#252A42] font-semibold text-gray-600 dark:text-gray-300">
                       {likedComments.length}
                     </span>
                   ) : (
-                    <Lock size={13} className="text-amber-500 dark:text-amber-400" />
+                    <PrivateBadge title="Tác giả đã cài đặt riêng tư" />
                   )}
                 </button>
               </div>

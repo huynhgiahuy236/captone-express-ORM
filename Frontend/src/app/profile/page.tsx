@@ -32,9 +32,25 @@ import {
   AlertTriangle,
   Users,
   Shield,
+  Lock,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Link from "next/link";
+
+function PrivateBadge({ title = "Quyền riêng tư đã được bật" }: { title?: string }) {
+  return (
+    <span
+      title={title}
+      className="inline-flex items-center justify-center shrink-0 ml-1"
+    >
+      <img
+        src="/icon-block-see.png"
+        alt="Quyền riêng tư"
+        className="h-4 w-4 object-contain opacity-75 dark:invert dark:opacity-85"
+      />
+    </span>
+  );
+}
 
 function ProfileTabSkeleton({ isComments = false }: { isComments?: boolean }) {
   if (isComments) {
@@ -209,6 +225,32 @@ export default function CurrentUserProfilePage() {
     setSelectedIds([]);
   };
 
+  const [myPrivacy, setMyPrivacy] = useState<{
+    created: "PUBLIC" | "FOLLOWERS" | "PRIVATE";
+    saved: "PUBLIC" | "FOLLOWERS" | "PRIVATE";
+    liked_pins: "PUBLIC" | "FOLLOWERS" | "PRIVATE";
+    liked_comments: "PUBLIC" | "FOLLOWERS" | "PRIVATE";
+    followers: "PUBLIC" | "FOLLOWERS" | "PRIVATE";
+    following: "PUBLIC" | "FOLLOWERS" | "PRIVATE";
+  }>({
+    created: "PUBLIC",
+    saved: "PUBLIC",
+    liked_pins: "PUBLIC",
+    liked_comments: "PUBLIC",
+    followers: "PUBLIC",
+    following: "PUBLIC",
+  });
+
+  useEffect(() => {
+    if (user?.privacySettings) {
+      setMyPrivacy((prev) => ({ ...prev, ...user.privacySettings }));
+    } else if (user?.quyen_rieng_tu) {
+      try {
+        setMyPrivacy((prev) => ({ ...prev, ...JSON.parse(user.quyen_rieng_tu!) }));
+      } catch (e) {}
+    }
+  }, [user]);
+
   const loadUserPins = async () => {
     if (!user) return;
     setLoadingContent(true);
@@ -225,6 +267,9 @@ export default function CurrentUserProfilePage() {
       if (profileRes.data?.data) {
         setFollowersCount(profileRes.data.data.followersCount || 0);
         setFollowingCount(profileRes.data.data.followingCount || 0);
+        if (profileRes.data.data.privacySettings) {
+          setMyPrivacy(profileRes.data.data.privacySettings);
+        }
       }
 
       setCreatedPins(Array.isArray(createdRes.data?.data) ? createdRes.data.data : []);
@@ -555,16 +600,20 @@ export default function CurrentUserProfilePage() {
               <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto [scrollbar-width:none] shrink-0">
                 <button
                   onClick={() => handleTabChange("created")}
-                  className={`pb-2 text-xs sm:text-sm font-bold transition relative cursor-pointer ${
+                  className={`pb-2 text-xs sm:text-sm font-bold transition relative cursor-pointer flex items-center gap-1.5 ${
                     activeTab === "created"
                       ? "text-[#0052cc] dark:text-blue-400"
                       : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
+                  <Layers size={17} />
                   <span>Tác phẩm đã tạo</span>
-                  <span className="ml-1 text-xs opacity-75">
+                  <span className="text-xs opacity-75">
                     ({searchQuery.trim() ? `${filteredCreatedPins.length}/${createdPins.length}` : createdPins.length})
                   </span>
+                  {myPrivacy?.created !== "PUBLIC" && (
+                    <PrivateBadge title={myPrivacy?.created === "PRIVATE" ? "Quyền riêng tư: Chỉ mình tôi" : "Quyền riêng tư: Người theo dõi"} />
+                  )}
                   {activeTab === "created" && (
                     <span className="absolute -bottom-3 left-0 right-0 h-1 bg-[#0052cc] dark:bg-blue-400 rounded-full" />
                   )}
@@ -572,16 +621,20 @@ export default function CurrentUserProfilePage() {
 
                 <button
                   onClick={() => handleTabChange("saved")}
-                  className={`pb-2 text-xs sm:text-sm font-bold transition relative cursor-pointer ${
+                  className={`pb-2 text-xs sm:text-sm font-bold transition relative cursor-pointer flex items-center gap-1.5 ${
                     activeTab === "saved"
                       ? "text-[#0052cc] dark:text-blue-400"
                       : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
+                  <Bookmark size={17} />
                   <span>Folder & Ghim đã lưu</span>
-                  <span className="ml-1 text-xs opacity-75">
+                  <span className="text-xs opacity-75">
                     ({searchQuery.trim() ? `${filteredSavedPins.length}/${savedPins.length}` : savedPins.length})
                   </span>
+                  {myPrivacy?.saved !== "PUBLIC" && (
+                    <PrivateBadge title={myPrivacy?.saved === "PRIVATE" ? "Quyền riêng tư: Chỉ mình tôi" : "Quyền riêng tư: Người theo dõi"} />
+                  )}
                   {activeTab === "saved" && (
                     <span className="absolute -bottom-3 left-0 right-0 h-1 bg-[#0052cc] dark:bg-blue-400 rounded-full" />
                   )}
@@ -595,11 +648,17 @@ export default function CurrentUserProfilePage() {
                       : "text-gray-500 dark:text-gray-400 hover:text-rose-500 dark:hover:text-rose-400"
                   }`}
                 >
-                  <Heart size={14} className={activeTab === "liked_pins" ? "fill-rose-500 text-rose-500" : ""} />
+                  <Heart
+                    size={17}
+                    className={activeTab === "liked_pins" ? "fill-rose-500 text-rose-500" : ""}
+                  />
                   <span>Ảnh đã thích</span>
                   <span className="text-xs opacity-75">
                     ({searchQuery.trim() ? `${filteredLikedPins.length}/${likedPins.length}` : likedPins.length})
                   </span>
+                  {myPrivacy?.liked_pins !== "PUBLIC" && (
+                    <PrivateBadge title={myPrivacy?.liked_pins === "PRIVATE" ? "Quyền riêng tư: Chỉ mình tôi" : "Quyền riêng tư: Người theo dõi"} />
+                  )}
                   {activeTab === "liked_pins" && (
                     <span className="absolute -bottom-3 left-0 right-0 h-1 bg-rose-500 rounded-full" />
                   )}
@@ -613,11 +672,14 @@ export default function CurrentUserProfilePage() {
                       : "text-gray-500 dark:text-gray-400 hover:text-rose-500 dark:hover:text-rose-400"
                   }`}
                 >
-                  <MessageCircle size={14} />
+                  <MessageCircle size={17} />
                   <span>Bình luận đã thích</span>
                   <span className="text-xs opacity-75">
                     ({searchQuery.trim() ? `${filteredLikedComments.length}/${likedComments.length}` : likedComments.length})
                   </span>
+                  {myPrivacy?.liked_comments !== "PUBLIC" && (
+                    <PrivateBadge title={myPrivacy?.liked_comments === "PRIVATE" ? "Quyền riêng tư: Chỉ mình tôi" : "Quyền riêng tư: Người theo dõi"} />
+                  )}
                   {activeTab === "liked_comments" && (
                     <span className="absolute -bottom-3 left-0 right-0 h-1 bg-rose-500 rounded-full" />
                   )}

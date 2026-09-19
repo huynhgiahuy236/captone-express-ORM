@@ -5,7 +5,10 @@ import { tokenService } from "./token.service.js";
 
 export const authService = {
   async register(req) {
-    const { email, password, fullName, age } = req.body;
+    const email = req.body.email;
+    const password = req.body.password || req.body.mat_khau;
+    const fullName = req.body.fullName || req.body.ho_ten;
+    const age = req.body.age || req.body.tuoi;
 
     if (!email || !password) {
       throw new BadRequestException("Vui lòng cung cấp đầy đủ email và mật khẩu");
@@ -39,7 +42,8 @@ export const authService = {
   },
 
   async login(req) {
-    const { email, password } = req.body;
+    const email = req.body.email;
+    const password = req.body.password || req.body.mat_khau;
 
     if (!email || !password) {
       throw new BadRequestException("Vui lòng nhập đầy đủ email và mật khẩu");
@@ -68,6 +72,21 @@ export const authService = {
     const accessToken = tokenService.createAccessToken(user.nguoi_dung_id);
     const refreshToken = tokenService.createRefreshToken(user.nguoi_dung_id);
 
+    let privacySettings = {
+      created: "PUBLIC",
+      saved: "PUBLIC",
+      liked_pins: "PUBLIC",
+      liked_comments: "PUBLIC",
+      followers: "PUBLIC",
+      following: "PUBLIC",
+    };
+
+    if (user.quyen_rieng_tu) {
+      try {
+        privacySettings = { ...privacySettings, ...JSON.parse(user.quyen_rieng_tu) };
+      } catch (e) {}
+    }
+
     return {
       user: {
         nguoi_dung_id: user.nguoi_dung_id,
@@ -75,6 +94,9 @@ export const authService = {
         ho_ten: user.ho_ten,
         tuoi: user.tuoi,
         anh_dai_dien: user.anh_dai_dien,
+        mo_ta: user.mo_ta,
+        quyen_rieng_tu: user.quyen_rieng_tu,
+        privacySettings,
       },
       accessToken,
       refreshToken,
@@ -110,6 +132,26 @@ export const authService = {
     const user = await prisma.nguoi_dung.findUnique({
       where: { nguoi_dung_id: req.user.nguoi_dung_id },
     });
-    return user;
+    if (!user) return null;
+
+    let privacySettings = {
+      created: "PUBLIC",
+      saved: "PUBLIC",
+      liked_pins: "PUBLIC",
+      liked_comments: "PUBLIC",
+      followers: "PUBLIC",
+      following: "PUBLIC",
+    };
+
+    if (user.quyen_rieng_tu) {
+      try {
+        privacySettings = { ...privacySettings, ...JSON.parse(user.quyen_rieng_tu) };
+      } catch (e) {}
+    }
+
+    return {
+      ...user,
+      privacySettings,
+    };
   },
 };

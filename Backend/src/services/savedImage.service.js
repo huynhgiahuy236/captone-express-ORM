@@ -93,7 +93,7 @@ export const savedImageService = {
         senderId: req.user.nguoi_dung_id,
         receiverId: image.nguoi_dung_id,
         imageId: imageId,
-        type: "LIKE",
+        type: "SAVE",
         content: `${senderName} đã lưu & yêu thích ý tưởng "${image.ten_hinh}" của bạn.`,
       });
 
