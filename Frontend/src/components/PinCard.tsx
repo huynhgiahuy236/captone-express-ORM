@@ -6,7 +6,7 @@ import { ImageItem } from "@/types";
 import { useAuth } from "@/lib/auth-context";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
-import { Bookmark, Share2, Heart, Check } from "lucide-react";
+import { Bookmark, Share2, Heart, Check, Download } from "lucide-react";
 
 interface PinCardProps {
   pin: ImageItem;
@@ -29,6 +29,37 @@ export const PinCard: React.FC<PinCardProps> = ({
   const [isLiked, setIsLiked] = useState<boolean>(pin.isLiked || false);
   const [likeCount, setLikeCount] = useState<number>(pin.likeCount || 0);
   const [isLiking, setIsLiking] = useState(false);
+
+  const handleDownload = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!pin?.duong_dan) return;
+    const toastId = toast.loading("Đang tải ảnh...");
+    try {
+      const response = await fetch(pin.duong_dan, { mode: "cors" });
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      const cleanName = (pin.ten_hinh || "huki-pin").toLowerCase().replace(/[^a-z0-9]/gi, "_").substring(0, 40);
+      link.download = `${cleanName || "huki-image"}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+      toast.success("Đã tải ảnh về máy!", { id: toastId });
+    } catch {
+      const link = document.createElement("a");
+      link.href = pin.duong_dan;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.download = `${pin.ten_hinh || "huki-image"}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast.success("Đang mở tải ảnh...", { id: toastId });
+    }
+  };
 
   const handleSaveToggle = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -181,8 +212,8 @@ export const PinCard: React.FC<PinCardProps> = ({
               className="w-full object-cover transition-transform duration-300 group-hover:scale-101"
             />
 
-            {/* Hover Overlay */}
-            <div className="absolute inset-0 bg-black/30 opacity-0 transition-opacity duration-200 group-hover:opacity-100 p-3 flex flex-col justify-between pointer-events-none">
+            {/* Hover Overlay - Only shown on sm screens and above to prevent misclicks on touch screens */}
+            <div className="hidden sm:flex absolute inset-0 bg-black/30 opacity-0 transition-opacity duration-200 group-hover:opacity-100 p-3 flex-col justify-between pointer-events-none">
               {/* Top Bar inside image (Heart Like & Bookmark Save) */}
               <div className="flex items-center justify-between pointer-events-auto">
                 {/* Heart Like Button (Circular) */}
@@ -220,7 +251,7 @@ export const PinCard: React.FC<PinCardProps> = ({
                 </button>
               </div>
 
-              {/* Bottom Actions inside image (Category Badge & Share Button) */}
+              {/* Bottom Actions inside image (Category Badge, Download & Share Buttons) */}
               <div className="flex justify-between items-center gap-2 pointer-events-auto">
                 {pin.the_loai ? (
                   <button
@@ -230,20 +261,30 @@ export const PinCard: React.FC<PinCardProps> = ({
                       e.stopPropagation();
                       window.location.href = `/category/${encodeURIComponent(pin.the_loai!)}`;
                     }}
-                    className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-black/65 hover:bg-black/90 text-white backdrop-blur-md shadow-xs border border-white/10 hover:border-white/30 transition cursor-pointer"
+                    className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-black/65 hover:bg-black/90 text-white backdrop-blur-md shadow-xs border border-white/10 hover:border-white/30 transition cursor-pointer truncate max-w-[120px]"
                     title={`Xem thể loại ${pin.the_loai}`}
                   >
                     {pin.the_loai}
                   </button>
                 ) : <div />}
-                <button
-                  type="button"
-                  onClick={handleShare}
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 dark:bg-[#1c2136]/90 text-gray-800 dark:text-white backdrop-blur-xs hover:bg-white active:scale-90 transition shadow-sm cursor-pointer"
-                  title="Chia sẻ liên kết"
-                >
-                  <Share2 size={15} />
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={handleDownload}
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 dark:bg-[#1c2136]/90 text-gray-800 dark:text-white backdrop-blur-xs hover:bg-white active:scale-90 transition shadow-sm cursor-pointer"
+                    title="Tải ảnh về máy"
+                  >
+                    <Download size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleShare}
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 dark:bg-[#1c2136]/90 text-gray-800 dark:text-white backdrop-blur-xs hover:bg-white active:scale-90 transition shadow-sm cursor-pointer"
+                    title="Chia sẻ liên kết"
+                  >
+                    <Share2 size={14} />
+                  </button>
+                </div>
               </div>
             </div>
           </div>

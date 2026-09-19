@@ -1,4 +1,4 @@
-#  DỰ ÁN CAPSTONE: PINTEREST CLONE (EXPRESS & PRISMA ORM)
+# 📌 DỰ ÁN CAPSTONE: PINTEREST CLONE (EXPRESS & PRISMA ORM)
 
 > **Khóa học**: Node.js Backend 56 - CyberSoft Academy  
 > **Dự án**: Pinterest Image Sharing Platform  
@@ -8,7 +8,7 @@
 
 ## 📌 1. Giới thiệu Dự án
 
-Dự án **Pinterest Clone** là hệ thống chia sẻ, khám phá và tương tác hình ảnh đa phương tiện toàn diện, được xây dựng theo kiến trúc Micro-Monorepo với Backend chuẩn RESTful API 3 lớp (Router - Controller - Service - Prisma ORM) và Frontend Next.js 14 App Router với giao diện Masonry Pinterest hiện đại.
+Dự án **Pinterest Clone** là hệ thống chia sẻ, khám phá và tương tác hình ảnh đa phương tiện toàn diện, được xây dựng theo kiến trúc Micro-Monorepo với Backend chuẩn RESTful API 3 lớp (Router - Controller - Service - Prisma ORM) và Frontend Next.js 14 App Router với giao diện Masonry Pinterest hiện đại, tối ưu responsive trên mọi thiết bị (Desktop, Tablet, Mobile).
 
 ---
 
@@ -23,7 +23,8 @@ Dự án **Pinterest Clone** là hệ thống chia sẻ, khám phá và tương 
 
 ### **Frontend**
 - **Framework**: Next.js 14 (App Router), React 18, TypeScript.
-- **Styling**: TailwindCSS, CSS Masonry Grid, Responsive Design (Dark/Light mode).
+- **Styling**: TailwindCSS, CSS Masonry Grid, Responsive Design (Desktop, Tablet & Mobile Drawer).
+- **Theme**: Hỗ trợ Chế độ Sáng / Tối (Dark / Light Mode) mượt mà.
 - **Icons & Animation**: Lucide React Icons, Canvas Confetti.
 - **HTTP Client**: Axios.
 
@@ -43,21 +44,36 @@ Capstone_Express_ORM/
 │   └── src/
 │       ├── common/                              # Tiện ích chung (Cloudinary, JWT, Swagger, Middlewares...)
 │       ├── controllers/                         # Tầng Điều khiển tiếp nhận và phản hồi HTTP Request
-│       ├── routers/                             # Tầng Định tuyến API (Auth, Images, Users, Likes, Follow...)
+│       ├── routers/                             # Tầng Định tuyến API (Auth, Images, Users, Likes, Notifications...)
 │       └── services/                            # Tầng Xử lý Logic nghiệp vụ cốt lõi & Truy vấn CSDL
 ├── Frontend/                                    # Mã nguồn Giao diện Người dùng (Next.js 14 App Router)
 │   ├── .env.example                             # File mẫu biến môi trường Frontend
 │   ├── package.json                             # Dependencies & Scripts Frontend
-│   └── src/                                     # App Router, Components (PinCard, Navbar, Modal...)
+│   └── src/                                     # App Router, Components (PinCard, Navbar, Modals...)
 ├── postman/
 │   └── Capstone_Pinterest.postman_collection.json # Bộ Test API Postman Collection hoàn chỉnh
 └── sql/
-    └── db_capstone_pinterest.sql                # File dump CSDL MySQL với 80 hình ảnh & dữ liệu mẫu
+    └── db_capstone_pinterest.sql                # File dump CSDL MySQL với 80+ hình ảnh & dữ liệu mẫu
 ```
 
 ---
 
-## 🚀 4. Hướng dẫn Cài đặt & Chạy ứng dụng
+## 🗄️ 4. Cấu trúc Cơ sở Dữ liệu (Database Schema)
+
+Hệ thống gồm 7 bảng liên kết chặt chẽ với cơ chế Soft-delete (`isDeleted`, `deletedAt`, `deletedBy`) và Cascade On Delete:
+
+1. `nguoi_dung`: Thông tin tài khoản, mật khẩu băm, avatar, mô tả, Google ID, quyền riêng tư (`quyen_rieng_tu`).
+2. `hinh_anh`: Quản lý hình ảnh (tiêu đề, URL Cloudinary, mô tả, thể loại, người tạo).
+3. `binh_luan`: Bình luận theo từng hình ảnh kèm phân cấp thời gian.
+4. `luu_anh`: Danh sách các hình ảnh người dùng đã lưu vào bộ sưu tập cá nhân.
+5. `tym_anh`: Lịch sử và số lượt thả tim ảnh của người dùng.
+6. `tym_binh_luan`: Lịch sử thích bình luận.
+7. `theo_doi`: Mối quan hệ theo dõi giữa người dùng và tác giả (`nguoi_theo_doi_id`, `nguoi_duoc_theo_doi_id`).
+8. `thong_bao`: Lưu trữ thông báo tương tác (`LIKE`, `COMMENT`, `FOLLOW`) giữa các thành viên.
+
+---
+
+## 🚀 5. Hướng dẫn Cài đặt & Chạy ứng dụng
 
 ### Bước 1: Khởi tạo Cơ sở dữ liệu MySQL
 1. Khởi động MySQL Server (XAMPP / Laragon / Docker / MySQL Workbench).
@@ -81,8 +97,8 @@ npx prisma generate
 # Khởi chạy Backend Server (Chế độ Dev)
 npm run dev
 ```
->  **Backend API URL**: `http://localhost:3069`  
->  **Swagger Documentation**: `http://localhost:3069/api-docs`
+> 🚀 **Backend API URL**: `http://localhost:3069`  
+> 📖 **Swagger Documentation**: `http://localhost:3069/api-docs`
 
 ### Bước 3: Cài đặt & Chạy Frontend
 ```bash
@@ -102,14 +118,14 @@ npm run dev
 
 ---
 
-## 📑 5. Danh sách API Endpoints chuẩn hóa
+## 📑 6. Danh sách API Endpoints chuẩn hóa
 
 ### 🔐 1. Nhóm Xác thực (Auth)
 - `POST /api/auth/signup` - Đăng ký tài khoản mới (`fullName`, `email`, `password`, `age`).
 - `POST /api/auth/signin` - Đăng nhập hệ thống (nhận Access Token & Refresh Token).
 - `GET /api/auth/info` - Lấy thông tin tài khoản đang đăng nhập (`Bearer Token`).
 - `POST /api/auth/refresh-token` - Cấp mới Access Token khi hết hạn.
-- `GET /api/auth/google` - Đăng nhập nhanh bằng tài khoản Google.
+- `GET /api/auth/google` - Đăng nhập nhanh bằng tài khoản Google OAuth 2.0.
 
 ### 🖼️ 2. Nhóm Hình ảnh (Images)
 - `GET /api/images` - Lấy danh sách hình ảnh (có phân trang `page`, `pageSize`, lọc theo `category`).
@@ -131,7 +147,7 @@ npm run dev
 ### 👤 5. Nhóm Người dùng & Hồ sơ (Users & Profile)
 - `GET /api/users/profile` - Lấy thông tin cá nhân và số liệu thống kê của người dùng.
 - `PUT /api/users/profile` - Cập nhật thông tin cá nhân và thay đổi ảnh đại diện (Avatar Cloudinary).
-- `PUT /api/users/privacy` - Cài đặt quyền riêng tư hiển thị các Tab (`PUBLIC` / `PRIVATE`).
+- `PUT /api/users/privacy` - Cài đặt quyền riêng tư hiển thị các Tab (`PUBLIC` / `FOLLOWERS` / `PRIVATE`).
 - `GET /api/users/:userId` - Lấy thông tin công khai của người dùng / tác giả khác.
 - `GET /api/users/saved-images` - Lấy danh sách các hình ảnh người dùng đã lưu.
 - `GET /api/users/created-images` - Lấy danh sách các hình ảnh do người dùng tạo.
@@ -144,9 +160,31 @@ npm run dev
 - `POST /api/follow/:authorId` - Theo dõi / Hủy theo dõi một tác giả.
 - `GET /api/follow/status/:authorId` - Kiểm tra trạng thái theo dõi tác giả.
 
+### 🔔 7. Nhóm Thông báo (Notifications)
+- `GET /api/notifications` - Lấy danh sách các thông báo nhận được.
+- `GET /api/notifications/unread-count` - Lấy số lượng thông báo chưa đọc.
+- `PUT /api/notifications/read-all` - Đánh dấu tất cả thông báo là đã đọc.
+- `PUT /api/notifications/:id/read` - Đánh dấu một thông báo cụ thể là đã đọc.
+
 ---
 
-## 👥 6. Tài khoản Thử nghiệm (Demo Accounts)
+## ✨ 7. Các Tính năng Nổi bật trên Frontend
+
+- **Giao diện Masonry Layout**: Bố cục ghim Pinterest xếp gạch mượt mà, tự động cân đối kích thước hình ảnh.
+- **Tải ảnh nhanh (Download Image)**: Tải trực tiếp ảnh gốc chất lượng cao về máy từ trang Feed và trang Chi tiết Pin.
+- **Tối ưu hóa Mobile & Responsive**:
+  - Thanh Navigation Mobile thu gọn tinh gọn với Logo và Menu Hamburger (Drawer).
+  - Ẩn các nút hover trên màn hình cảm ứng để tránh chạm nhầm, hỗ trợ thao tác chạm mượt mà.
+  - Phân bố tab hồ sơ người dùng 4 cột đều đặn trên mobile.
+  - Điều chỉnh tùy chọn Quyền riêng tư dạng Dropdown Select thân thiện với ngón tay.
+- **Cài đặt Quyền riêng tư nâng cao**: Cho phép người dùng tùy biến hiển thị các mục (Đã lưu, Đã tạo, Đã thích) theo dạng *Mọi người*, *Chỉ người theo dõi*, hoặc *Chỉ mình tôi*.
+- **Xóa / Bỏ lưu hàng loạt (Batch Actions)**: Hỗ trợ chế độ chọn nhiều ghim để quản lý bộ sưu tập nhanh chóng.
+- **Dark / Light Theme**: Tích hợp chuyển đổi giao diện Sáng / Tối tiện lợi lưu trạng thái trong LocalStorage.
+- **Tìm kiếm Debounce thông minh & Bộ lọc danh mục**: Tìm kiếm theo thời gian thực mà không gây nghẽn Server.
+
+---
+
+## 👥 8. Tài khoản Thử nghiệm (Demo Accounts)
 
 | Email | Mật khẩu | Họ tên | Vai trò |
 | :--- | :--- | :--- | :--- |
@@ -157,7 +195,7 @@ npm run dev
 
 ---
 
-## 🧪 7. Kiểm thử với Postman Collection Runner
+## 🧪 9. Kiểm thử với Postman Collection Runner
 
 1. Mở phần mềm **Postman**.
 2. Chọn **Import** và chọn file: `postman/Capstone_Pinterest.postman_collection.json`.

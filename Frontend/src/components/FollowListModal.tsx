@@ -165,8 +165,8 @@ export const FollowListModal: React.FC<FollowListModalProps> = ({
           </div>
 
           {/* Quick Search */}
-          <div className="relative mt-3">
-            <Search size={14} className="absolute left-3.5 top-3 text-gray-400" />
+          <div className="relative mt-3 flex items-center">
+            <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}

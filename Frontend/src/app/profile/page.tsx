@@ -140,23 +140,36 @@ export default function CurrentUserProfilePage() {
   const [isBatchDeleting, setIsBatchDeleting] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [countdown, setCountdown] = useState(5);
+  const [progress, setProgress] = useState(0);
 
-  // 5-second countdown timer for confirmation modal
+  // 5-second countdown timer with synchronized smooth progress bar for confirmation modal
   useEffect(() => {
     let timer: any;
+    const TOTAL_DURATION = 5000; // exactly 5000ms (5s)
+
     if (isConfirmModalOpen) {
       setCountdown(5);
+      setProgress(0);
+      const startTime = Date.now();
+
       timer = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
+        const elapsed = Date.now() - startTime;
+        const remaining = Math.max(0, TOTAL_DURATION - elapsed);
+        const currentCount = Math.ceil(remaining / 1000);
+        const currentProgress = Math.min(100, (elapsed / TOTAL_DURATION) * 100);
+
+        setCountdown(currentCount);
+        setProgress(currentProgress);
+
+        if (elapsed >= TOTAL_DURATION) {
+          clearInterval(timer);
+          setCountdown(0);
+          setProgress(100);
+        }
+      }, 50);
     } else {
       setCountdown(5);
+      setProgress(0);
     }
     return () => clearInterval(timer);
   }, [isConfirmModalOpen]);
@@ -370,6 +383,16 @@ export default function CurrentUserProfilePage() {
       toast.error(msg, { id: toastId });
     } finally {
       setIsBatchDeleting(false);
+    }
+  };
+
+  // Trigger batch action: Created pins require 5s confirmation modal, Saved/Liked items execute immediately
+  const handleBatchButtonClick = () => {
+    if (selectedIds.length === 0) return;
+    if (activeTab === "created") {
+      setIsConfirmModalOpen(true);
+    } else {
+      handleBatchActionConfirm();
     }
   };
 
@@ -595,99 +618,107 @@ export default function CurrentUserProfilePage() {
           {/* Tabs & Search Filter & Selection Bar */}
           <div className="flex flex-col gap-3 border-b border-gray-200 dark:border-[#2d2f40] pb-3 mb-6">
             
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-              {/* Tabs List */}
-              <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto [scrollbar-width:none] shrink-0">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              {/* Tabs List: Evenly distributed 4-column grid on Mobile/Tablet (< lg), flex on Desktop (lg:) */}
+              <div className="grid grid-cols-4 sm:flex items-center gap-1 sm:gap-2 lg:gap-4 w-full lg:w-auto py-1 border-b border-gray-100 lg:border-transparent dark:border-[#2d2f40]/50 lg:dark:border-transparent overflow-x-auto no-scrollbar">
                 <button
+                  type="button"
                   onClick={() => handleTabChange("created")}
-                  className={`pb-2 text-xs sm:text-sm font-bold transition relative cursor-pointer flex items-center gap-1.5 ${
+                  title="Tác phẩm đã tạo"
+                  className={`w-full sm:w-auto pb-2.5 text-xs sm:text-sm font-bold transition relative cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 whitespace-nowrap shrink-0 ${
                     activeTab === "created"
                       ? "text-[#0052cc] dark:text-blue-400"
                       : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
-                  <Layers size={17} />
-                  <span>Tác phẩm đã tạo</span>
-                  <span className="text-xs opacity-75">
-                    ({searchQuery.trim() ? `${filteredCreatedPins.length}/${createdPins.length}` : createdPins.length})
+                  <Layers size={18} className="shrink-0" />
+                  <span className="hidden sm:inline">Đã tạo</span>
+                  <span className="text-[11px] sm:text-xs opacity-75 px-1.5 py-0.5 rounded-full bg-gray-100 dark:bg-[#252A42] font-semibold">
+                    {searchQuery.trim() ? `${filteredCreatedPins.length}/${createdPins.length}` : createdPins.length}
                   </span>
                   {myPrivacy?.created !== "PUBLIC" && (
                     <PrivateBadge title={myPrivacy?.created === "PRIVATE" ? "Quyền riêng tư: Chỉ mình tôi" : "Quyền riêng tư: Người theo dõi"} />
                   )}
                   {activeTab === "created" && (
-                    <span className="absolute -bottom-3 left-0 right-0 h-1 bg-[#0052cc] dark:bg-blue-400 rounded-full" />
+                    <span className="absolute -bottom-0.5 left-1 right-1 sm:left-0 sm:right-0 h-1 bg-[#0052cc] dark:bg-blue-400 rounded-full" />
                   )}
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => handleTabChange("saved")}
-                  className={`pb-2 text-xs sm:text-sm font-bold transition relative cursor-pointer flex items-center gap-1.5 ${
+                  title="Ghim đã lưu"
+                  className={`w-full sm:w-auto pb-2.5 text-xs sm:text-sm font-bold transition relative cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 whitespace-nowrap shrink-0 ${
                     activeTab === "saved"
                       ? "text-[#0052cc] dark:text-blue-400"
                       : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
-                  <Bookmark size={17} />
-                  <span>Folder & Ghim đã lưu</span>
-                  <span className="text-xs opacity-75">
-                    ({searchQuery.trim() ? `${filteredSavedPins.length}/${savedPins.length}` : savedPins.length})
+                  <Bookmark size={18} className="shrink-0" />
+                  <span className="hidden sm:inline">Đã lưu</span>
+                  <span className="text-[11px] sm:text-xs opacity-75 px-1.5 py-0.5 rounded-full bg-gray-100 dark:bg-[#252A42] font-semibold">
+                    {searchQuery.trim() ? `${filteredSavedPins.length}/${savedPins.length}` : savedPins.length}
                   </span>
                   {myPrivacy?.saved !== "PUBLIC" && (
                     <PrivateBadge title={myPrivacy?.saved === "PRIVATE" ? "Quyền riêng tư: Chỉ mình tôi" : "Quyền riêng tư: Người theo dõi"} />
                   )}
                   {activeTab === "saved" && (
-                    <span className="absolute -bottom-3 left-0 right-0 h-1 bg-[#0052cc] dark:bg-blue-400 rounded-full" />
+                    <span className="absolute -bottom-0.5 left-1 right-1 sm:left-0 sm:right-0 h-1 bg-[#0052cc] dark:bg-blue-400 rounded-full" />
                   )}
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => handleTabChange("liked_pins")}
-                  className={`pb-2 text-xs sm:text-sm font-bold transition relative cursor-pointer flex items-center gap-1.5 ${
+                  title="Ảnh đã thích"
+                  className={`w-full sm:w-auto pb-2.5 text-xs sm:text-sm font-bold transition relative cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 whitespace-nowrap shrink-0 ${
                     activeTab === "liked_pins"
                       ? "text-rose-600 dark:text-rose-400"
                       : "text-gray-500 dark:text-gray-400 hover:text-rose-500 dark:hover:text-rose-400"
                   }`}
                 >
                   <Heart
-                    size={17}
-                    className={activeTab === "liked_pins" ? "fill-rose-500 text-rose-500" : ""}
+                    size={18}
+                    className={`shrink-0 ${activeTab === "liked_pins" ? "fill-rose-500 text-rose-500" : ""}`}
                   />
-                  <span>Ảnh đã thích</span>
-                  <span className="text-xs opacity-75">
-                    ({searchQuery.trim() ? `${filteredLikedPins.length}/${likedPins.length}` : likedPins.length})
+                  <span className="hidden sm:inline">Đã thích</span>
+                  <span className="text-[11px] sm:text-xs opacity-75 px-1.5 py-0.5 rounded-full bg-gray-100 dark:bg-[#252A42] font-semibold">
+                    {searchQuery.trim() ? `${filteredLikedPins.length}/${likedPins.length}` : likedPins.length}
                   </span>
                   {myPrivacy?.liked_pins !== "PUBLIC" && (
                     <PrivateBadge title={myPrivacy?.liked_pins === "PRIVATE" ? "Quyền riêng tư: Chỉ mình tôi" : "Quyền riêng tư: Người theo dõi"} />
                   )}
                   {activeTab === "liked_pins" && (
-                    <span className="absolute -bottom-3 left-0 right-0 h-1 bg-rose-500 rounded-full" />
+                    <span className="absolute -bottom-0.5 left-1 right-1 sm:left-0 sm:right-0 h-1 bg-rose-500 rounded-full" />
                   )}
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => handleTabChange("liked_comments")}
-                  className={`pb-2 text-xs sm:text-sm font-bold transition relative cursor-pointer flex items-center gap-1.5 ${
+                  title="Bình luận đã thích"
+                  className={`w-full sm:w-auto pb-2.5 text-xs sm:text-sm font-bold transition relative cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 whitespace-nowrap shrink-0 ${
                     activeTab === "liked_comments"
                       ? "text-rose-600 dark:text-rose-400"
                       : "text-gray-500 dark:text-gray-400 hover:text-rose-500 dark:hover:text-rose-400"
                   }`}
                 >
-                  <MessageCircle size={17} />
-                  <span>Bình luận đã thích</span>
-                  <span className="text-xs opacity-75">
-                    ({searchQuery.trim() ? `${filteredLikedComments.length}/${likedComments.length}` : likedComments.length})
+                  <MessageCircle size={18} className="shrink-0" />
+                  <span className="hidden sm:inline">Bình luận</span>
+                  <span className="text-[11px] sm:text-xs opacity-75 px-1.5 py-0.5 rounded-full bg-gray-100 dark:bg-[#252A42] font-semibold">
+                    {searchQuery.trim() ? `${filteredLikedComments.length}/${likedComments.length}` : likedComments.length}
                   </span>
                   {myPrivacy?.liked_comments !== "PUBLIC" && (
                     <PrivateBadge title={myPrivacy?.liked_comments === "PRIVATE" ? "Quyền riêng tư: Chỉ mình tôi" : "Quyền riêng tư: Người theo dõi"} />
                   )}
                   {activeTab === "liked_comments" && (
-                    <span className="absolute -bottom-3 left-0 right-0 h-1 bg-rose-500 rounded-full" />
+                    <span className="absolute -bottom-0.5 left-1 right-1 sm:left-0 sm:right-0 h-1 bg-rose-500 rounded-full" />
                   )}
                 </button>
               </div>
 
               {/* Right: Actions (Search + Multi-select button) */}
-              <div className="flex items-center gap-2.5 shrink-0">
+              <div className="flex items-center gap-2 sm:gap-2.5 w-full lg:w-auto shrink-0">
                 {/* Multi-Select Mode Toggle Button */}
                 <button
                   type="button"
@@ -695,7 +726,7 @@ export default function CurrentUserProfilePage() {
                     setIsSelectMode(!isSelectMode);
                     setSelectedIds([]);
                   }}
-                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer active:scale-95 ${
+                  className={`flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold transition cursor-pointer active:scale-95 shrink-0 ${
                     isSelectMode
                       ? "bg-[#0052cc] text-white shadow-xs"
                       : "bg-gray-100 dark:bg-[#252A42] hover:bg-gray-200 dark:hover:bg-[#2e3450] text-gray-700 dark:text-gray-200 border border-transparent dark:border-[#2d2f40]"
@@ -707,16 +738,16 @@ export default function CurrentUserProfilePage() {
                 </button>
 
                 {/* Quick Search Filter Input */}
-                <div className="relative flex items-center w-full sm:w-auto min-w-[180px] sm:min-w-[220px]">
-                  <Search size={14} className="absolute left-3 text-gray-400 dark:text-gray-500 pointer-events-none" />
+                <div className="relative flex-1 lg:w-auto min-w-[160px] lg:min-w-[220px] flex items-center">
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Lọc trong tab này..."
-                    className="w-full pl-8 pr-8 py-1.5 rounded-full bg-gray-100 dark:bg-[#252A42] border border-transparent focus:border-[#0052cc] text-xs font-medium text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-hidden transition shadow-2xs"
+                    className="w-full pl-8 pr-8 py-2 rounded-full bg-gray-100 dark:bg-[#252A42] border border-transparent focus:border-[#0052cc] text-xs font-medium text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-hidden transition shadow-2xs"
                   />
-                  <div className="absolute right-2.5 flex items-center gap-1.5">
+                  <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
                     {isFiltering ? (
                       <Loader2 size={14} className="animate-spin text-[#0052cc] dark:text-blue-400" />
                     ) : searchQuery ? (
@@ -1093,7 +1124,7 @@ export default function CurrentUserProfilePage() {
               <button
                 type="button"
                 disabled={selectedIds.length === 0 || isBatchDeleting}
-                onClick={() => setIsConfirmModalOpen(true)}
+                onClick={handleBatchButtonClick}
                 className="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 active:scale-95 transition disabled:opacity-40 disabled:pointer-events-none cursor-pointer shadow-md shadow-rose-600/20"
               >
                 {isBatchDeleting ? (
@@ -1163,8 +1194,8 @@ export default function CurrentUserProfilePage() {
             {/* 5-second countdown progress bar */}
             <div className="w-full bg-gray-100 dark:bg-[#252A42] rounded-full h-1.5 mb-6 overflow-hidden">
               <div
-                className="bg-rose-500 h-full transition-all duration-1000 ease-linear"
-                style={{ width: `${((5 - countdown) / 5) * 100}%` }}
+                className="bg-rose-500 h-full transition-[width] duration-75 ease-linear rounded-full"
+                style={{ width: `${progress}%` }}
               />
             </div>
 

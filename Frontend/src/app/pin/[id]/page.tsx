@@ -26,6 +26,7 @@ import {
   Heart,
   UserPlus,
   UserCheck,
+  Download,
 } from "lucide-react";
 
 // Individual Comment Row with 3-line clamp, 'Xem thêm' / 'Thu gọn', and Heart Like toggle
@@ -153,6 +154,7 @@ export default function PinDetailPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteCountdown, setDeleteCountdown] = useState(5);
+  const [deleteProgress, setDeleteProgress] = useState(0);
   const [loading, setLoading] = useState(true);
   const [relatedPins, setRelatedPins] = useState<ImageItem[]>([]);
   const [explorePins, setExplorePins] = useState<ImageItem[]>([]);
@@ -176,20 +178,32 @@ export default function PinDetailPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Countdown timer for Delete Confirmation Modal (5s lock)
+  // Synchronized 5-second countdown timer for Delete Confirmation Modal
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer: any;
+    const TOTAL_DURATION = 5000;
     if (showDeleteModal) {
       setDeleteCountdown(5);
+      setDeleteProgress(0);
+      const startTime = Date.now();
       timer = setInterval(() => {
-        setDeleteCountdown((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
+        const elapsed = Date.now() - startTime;
+        const remaining = Math.max(0, TOTAL_DURATION - elapsed);
+        const currentCount = Math.ceil(remaining / 1000);
+        const currentProgress = Math.min(100, (elapsed / TOTAL_DURATION) * 100);
+
+        setDeleteCountdown(currentCount);
+        setDeleteProgress(currentProgress);
+
+        if (elapsed >= TOTAL_DURATION) {
+          clearInterval(timer);
+          setDeleteCountdown(0);
+          setDeleteProgress(100);
+        }
+      }, 50);
+    } else {
+      setDeleteCountdown(5);
+      setDeleteProgress(0);
     }
     return () => clearInterval(timer);
   }, [showDeleteModal]);
@@ -418,10 +432,48 @@ export default function PinDetailPage() {
     }
   };
 
+  const [isDownloading, setIsDownloading] = useState(false);
+
   const handleShare = () => {
     if (typeof window !== "undefined") {
       navigator.clipboard.writeText(window.location.href);
       toast.success("Đã sao chép liên kết vào bộ nhớ tạm!");
+    }
+  };
+
+  const handleDownloadImage = async () => {
+    if (!pin?.duong_dan) return;
+    setIsDownloading(true);
+    const toastId = toast.loading("Đang chuẩn bị tải ảnh chất lượng cao...");
+    try {
+      const response = await fetch(pin.duong_dan, { mode: "cors" });
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      const cleanName = (pin.ten_hinh || "huki-pin")
+        .toLowerCase()
+        .replace(/[^a-z0-9]/gi, "_")
+        .substring(0, 40);
+      link.download = `${cleanName || "huki-image"}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+      toast.success("Tải ảnh thành công!", { id: toastId });
+    } catch {
+      // Fallback direct download
+      const link = document.createElement("a");
+      link.href = pin.duong_dan;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.download = `${pin.ten_hinh || "huki-image"}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast.success("Đang mở tải ảnh...", { id: toastId });
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -469,19 +521,35 @@ export default function PinDetailPage() {
           <div className="overflow-hidden rounded-3xl bg-white dark:bg-[#1c2136] shadow-xl ring-1 ring-black/5 dark:ring-[#2d2f40] border border-transparent dark:border-[#2d2f40] p-4 sm:p-6 lg:p-7">
             {/* Top Action Bar */}
             <div className="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-[#2d2f40]">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                {/* Download Image Button */}
                 <button
+                  type="button"
+                  onClick={handleDownloadImage}
+                  disabled={isDownloading}
+                  className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-[#252A42] text-gray-700 dark:text-gray-200 transition cursor-pointer active:scale-95"
+                  title="Tải ảnh về máy"
+                >
+                  {isDownloading ? <Loader2 size={18} className="animate-spin text-[#0052cc]" /> : <Download size={18} />}
+                </button>
+
+                {/* Share Button */}
+                <button
+                  type="button"
                   onClick={handleShare}
-                  className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-[#252A42] text-gray-700 dark:text-gray-200 transition cursor-pointer"
-                  title="Chia sẻ"
+                  className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-[#252A42] text-gray-700 dark:text-gray-200 transition cursor-pointer active:scale-95"
+                  title="Chia sẻ liên kết"
                 >
                   <Share2 size={18} />
                 </button>
+
+                {/* Delete Pin Button (if author) */}
                 {isOwner && (
                   <button
+                    type="button"
                     onClick={() => setShowDeleteModal(true)}
                     disabled={isDeleting}
-                    className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 transition cursor-pointer"
+                    className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 transition cursor-pointer active:scale-95"
                     title="Xóa ảnh"
                   >
                     <Trash2 size={18} />
@@ -713,7 +781,7 @@ export default function PinDetailPage() {
                   <textarea
                     ref={commentTextareaRef}
                     rows={1}
-                    placeholder={user ? "Thêm nhận xét của bạn... (Enter gửi, Shift+Enter xuống dòng)" : "Đăng nhập để bình luận..."}
+                    placeholder={user ? "Thêm nhận xét của bạn..." : "Đăng nhập để bình luận..."}
                     value={newComment}
                     onChange={handleCommentChange}
                     onKeyDown={(e) => {
@@ -728,12 +796,19 @@ export default function PinDetailPage() {
 
                   <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-200/40 dark:border-white/5">
                     <span className="text-[10px] text-gray-400 dark:text-gray-400 font-medium select-none">
-                      {newComment.length > 0 ? `${newComment.length}/2000 ký tự` : "Nhấn Enter để gửi"}
+                      {newComment.length > 0 ? (
+                        `${newComment.length}/2000 ký tự`
+                      ) : (
+                        <>
+                          <span className="hidden sm:inline">Nhấn Enter để gửi (Shift+Enter xuống dòng)</span>
+                          <span className="sm:hidden">Viết nhận xét</span>
+                        </>
+                      )}
                     </span>
                     <button
                       type="submit"
                       disabled={!user || !newComment.trim() || isSubmittingComment}
-                      className="flex h-7 w-7 items-center justify-center rounded-full bg-[#0052cc] hover:bg-[#0041a8] text-white shadow-xs active:scale-90 transition disabled:opacity-30 cursor-pointer"
+                      className="flex h-7 w-7 items-center justify-center rounded-full bg-[#0052cc] hover:bg-[#0041a8] text-white shadow-xs active:scale-90 transition disabled:opacity-30 cursor-pointer shrink-0"
                       title="Gửi nhận xét"
                     >
                       <Send size={12} />
@@ -837,7 +912,15 @@ export default function PinDetailPage() {
               Ảnh <span className="font-semibold text-gray-700 dark:text-gray-300">"{pin.ten_hinh}"</span> sẽ bị xóa vĩnh viễn khỏi hệ thống và không thể hoàn tác.
             </p>
 
-            <div className="mt-6 flex items-center gap-3">
+            {/* 5-second countdown progress bar */}
+            <div className="w-full bg-gray-100 dark:bg-[#252A42] rounded-full h-1.5 mt-4 mb-2 overflow-hidden">
+              <div
+                className="bg-rose-500 h-full transition-[width] duration-75 ease-linear rounded-full"
+                style={{ width: `${deleteProgress}%` }}
+              />
+            </div>
+
+            <div className="mt-4 flex items-center gap-3">
               <button
                 type="button"
                 onClick={() => setShowDeleteModal(false)}

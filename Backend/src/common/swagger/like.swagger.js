@@ -3,7 +3,6 @@ export const likeSwagger = {
     post: {
       tags: ["Likes"],
       summary: "Toggle like / unlike image",
-      security: [{ bearerAuth: [] }],
       parameters: [
         {
           name: "imageId",
@@ -11,11 +10,18 @@ export const likeSwagger = {
           required: true,
           schema: { type: "integer", example: 1 },
         },
+        {
+          name: "token",
+          in: "header",
+          description: "Access Token",
+          required: false,
+          schema: { type: "string" },
+        },
       ],
       responses: {
-        200: { description: "Đã thả tim hình ảnh / Đã bỏ tim hình ảnh" },
+        200: { description: "Success" },
         401: { description: "Unauthorized" },
-        404: { description: "Hình ảnh không tồn tại" },
+        404: { description: "Not Found" },
         500: { description: "Internal Server Error" },
       },
     },
@@ -24,7 +30,6 @@ export const likeSwagger = {
     post: {
       tags: ["Likes"],
       summary: "Toggle like / unlike comment",
-      security: [{ bearerAuth: [] }],
       parameters: [
         {
           name: "commentId",
@@ -32,11 +37,18 @@ export const likeSwagger = {
           required: true,
           schema: { type: "integer", example: 1 },
         },
+        {
+          name: "token",
+          in: "header",
+          description: "Access Token",
+          required: false,
+          schema: { type: "string" },
+        },
       ],
       responses: {
-        200: { description: "Đã thích bình luận / Đã bỏ thích bình luận" },
+        200: { description: "Success" },
         401: { description: "Unauthorized" },
-        404: { description: "Bình luận không tồn tại" },
+        404: { description: "Not Found" },
         500: { description: "Internal Server Error" },
       },
     },

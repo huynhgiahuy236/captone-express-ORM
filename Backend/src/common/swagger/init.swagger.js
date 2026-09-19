@@ -5,12 +5,13 @@ import { savedImageSwagger } from "./savedImage.swagger.js";
 import { userSwagger } from "./user.swagger.js";
 import { likeSwagger } from "./like.swagger.js";
 import { followSwagger } from "./follow.swagger.js";
+import { notificationSwagger } from "./notification.swagger.js";
 
 export const swaggerDocument = {
   openapi: "3.0.0",
   info: {
     title: "Capstone Pinterest Clone API",
-    description: "API Documentation for Pinterest Image Sharing Platform",
+    description: "RESTful API Documentation for Pinterest Image Sharing Platform (Node.js Express + Prisma ORM)",
     version: "1.0.0",
   },
   servers: [
@@ -25,7 +26,7 @@ export const swaggerDocument = {
         type: "http",
         scheme: "bearer",
         bearerFormat: "JWT",
-        description: "Enter your JWT Access Token (e.g. Bearer <token>)",
+        description: "Enter your JWT Access Token directly",
       },
     },
   },
@@ -37,5 +38,6 @@ export const swaggerDocument = {
     ...userSwagger,
     ...likeSwagger,
     ...followSwagger,
+    ...notificationSwagger,
   },
 };

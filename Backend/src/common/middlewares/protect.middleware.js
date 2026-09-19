@@ -6,11 +6,12 @@ export const protect = async (req, res, next) => {
   try {
     let accessToken = req.cookies?.accessToken;
 
-    if (!accessToken && req.headers.authorization) {
-      const authHeader = req.headers.authorization;
-      if (authHeader.startsWith("Bearer ")) {
-        accessToken = authHeader.split(" ")[1];
+    if (!accessToken && (req.headers.authorization || req.headers.token)) {
+      let authHeader = (req.headers.authorization || req.headers.token).trim();
+      while (authHeader.toLowerCase().startsWith("bearer ")) {
+        authHeader = authHeader.slice(7).trim();
       }
+      accessToken = authHeader;
     }
 
     if (!accessToken) {
@@ -43,11 +44,12 @@ export const optionalProtect = async (req, res, next) => {
   try {
     let accessToken = req.cookies?.accessToken;
 
-    if (!accessToken && req.headers.authorization) {
-      const authHeader = req.headers.authorization;
-      if (authHeader.startsWith("Bearer ")) {
-        accessToken = authHeader.split(" ")[1];
+    if (!accessToken && (req.headers.authorization || req.headers.token)) {
+      let authHeader = (req.headers.authorization || req.headers.token).trim();
+      while (authHeader.toLowerCase().startsWith("bearer ")) {
+        authHeader = authHeader.slice(7).trim();
       }
+      accessToken = authHeader;
     }
 
     if (accessToken) {

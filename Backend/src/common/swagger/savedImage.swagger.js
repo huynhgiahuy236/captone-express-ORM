@@ -2,7 +2,7 @@ export const savedImageSwagger = {
   "/api/saved-images/check/{imageId}": {
     get: {
       tags: ["SavedImages"],
-      security: [{ bearerAuth: [] }],
+      summary: "Check if user has saved this image",
       parameters: [
         {
           name: "imageId",
@@ -10,10 +10,16 @@ export const savedImageSwagger = {
           required: true,
           schema: { type: "integer", example: 1 },
         },
+        {
+          name: "token",
+          in: "header",
+          description: "Access Token",
+          required: false,
+          schema: { type: "string" },
+        },
       ],
       responses: {
         200: { description: "Success" },
-        400: { description: "Bad Request" },
         401: { description: "Unauthorized" },
         404: { description: "Not Found" },
         500: { description: "Internal Server Error" },
@@ -23,7 +29,7 @@ export const savedImageSwagger = {
   "/api/saved-images/toggle/{imageId}": {
     post: {
       tags: ["SavedImages"],
-      security: [{ bearerAuth: [] }],
+      summary: "Toggle save / unsave image",
       parameters: [
         {
           name: "imageId",
@@ -31,10 +37,16 @@ export const savedImageSwagger = {
           required: true,
           schema: { type: "integer", example: 1 },
         },
+        {
+          name: "token",
+          in: "header",
+          description: "Access Token",
+          required: false,
+          schema: { type: "string" },
+        },
       ],
       responses: {
         200: { description: "Success" },
-        400: { description: "Bad Request" },
         401: { description: "Unauthorized" },
         404: { description: "Not Found" },
         500: { description: "Internal Server Error" },
